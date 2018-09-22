@@ -1,8 +1,9 @@
 # 1. BraTs
 
 ### 1-1) Overview
+<div align="center">
 ![](https://i.imgur.com/emAFrL1.gif)  ![](https://i.imgur.com/dGrmh2x.gif)
-
+</div>
 Ground Truth (Blue)         Model Segmentation (Red)
 < Complete Tumor Segmentation> 
 
