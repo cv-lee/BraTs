@@ -4,7 +4,7 @@
 ![](https://i.imgur.com/emAFrL1.gif)  ![](https://i.imgur.com/dGrmh2x.gif)
 < Complete Tumor Segmentation> 
 
-![](https://i.imgur.com/emAFrL1.gif)  ![](https://i.imgur.com/dGrmh2x.gif)
+![](https://i.imgur.com/n0WAMwh.gif)  ![](https://i.imgur.com/dGrmh2x.gif)
 < Core Tumor Segmentation >
 
 ### 1-2) About
