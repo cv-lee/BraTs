@@ -20,7 +20,7 @@ This project is a segmentation model (U-Net) to diagnose brain tumor (Complete, 
 
 ### 1-3) U-Net
 
-'''
+'''bash
 models/unet.py
 '''
 
