@@ -2,6 +2,10 @@
 
 ### 1-1) Overview
 ![](https://i.imgur.com/emAFrL1.gif)  ![](https://i.imgur.com/dGrmh2x.gif)
+< Complete Tumor Segmentation> 
+
+![](https://i.imgur.com/emAFrL1.gif)  ![](https://i.imgur.com/dGrmh2x.gif)
+< Core Tumor Segmentation >
 
 ### 1-2) About
 This project is a segmentation model (U-Net) to diagnose brain tumor. 
