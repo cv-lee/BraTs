@@ -20,9 +20,14 @@ This project is a segmentation model (U-Net) to diagnose brain tumor (Complete, 
 
 ### 1-3) U-Net
 
-'''bash
-models/unet.py
-'''
+```bash
+data
+  -- Brats17TrainingData
+  -- train_dev_all
+model.py
+train.py
+...
+```
 
 ![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
 
