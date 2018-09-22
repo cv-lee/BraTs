@@ -15,11 +15,6 @@
 </div>
 
 
-![]()  ![]()
-
-Ground Truth (Blue)         Model Segmentation (Red)
-< Core Tumor Segmentation >
-
 ### 1-2) About
 This project is a segmentation model (U-Net) to diagnose brain tumor. 
 
