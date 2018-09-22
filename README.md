@@ -1,3 +1,5 @@
+@import "colors.css";
+
 # 1. BraTs
 
 ### 1-1) Overview
@@ -11,7 +13,7 @@
   <em align="center">Fig 2: Brain Core Tumor Segmention</em>
   <br>
   <br>
-  <em align="center"> cf) Ground Truth (Blue) Model Segmentation (Red)></em>
+  <em align="center"> cf) Ground Truth (Blue) Model Segmentation (Red)</em>
 </div>
 
 
