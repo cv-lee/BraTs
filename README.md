@@ -18,10 +18,12 @@
 ### 1-2) About
 This project is a segmentation model (U-Net) to diagnose brain tumor (Complete, Core, Enhancing). 
 
-### 1-2) U-Net
+### 1-3) U-Net
+
 '''
 models/unet.py
 '''
+
 ![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
 
 
