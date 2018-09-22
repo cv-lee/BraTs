@@ -3,9 +3,11 @@
 ### 1-1) Overview
 <div align="center">
   <img src="https://i.imgur.com/emAFrL1.gif">  <img src="https://i.imgur.com/dGrmh2x.gif">
+  <br>
+  <em align="center">Fig 1: Brain Tumor Segmention</em>  
 </div>
 Ground Truth (Blue)         Model Segmentation (Red)
-< Complete Tumor Segmentation> 
+
 
 ![](https://i.imgur.com/n0WAMwh.gif)  ![](https://i.imgur.com/PFTwmVb.gif)
 
