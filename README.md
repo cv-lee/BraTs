@@ -1,7 +1,7 @@
 # 1. BraTs
 
 ### 1-1) Overview
-![]()
+![](blob:https://imgur.com/2f5429e1-ec73-46f2-840e-b3690168d0ac)
 
 ### 1-2) About
 This project is a segmentation model (U-Net) to diagnose brain tumor. 
