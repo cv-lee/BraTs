@@ -13,13 +13,13 @@ models/unet.py
 ![]()
 
 
-#2. Dataset
+# 2. Dataset
 
 ### 2-1) Overview
 
 ### 2-2) Data Argumentation
 
-#3. Train
+# 3. Train
 '''
 train.py
 '''
@@ -32,7 +32,7 @@ Adam
 
 ### 3-3) Hyperparameter
 
-#4. Test
+# 4. Test
 ### 4-1) Test
 
 ### 4-2) Checkpoint
