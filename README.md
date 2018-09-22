@@ -2,7 +2,7 @@
 
 ### 1-1) Overview
 <div align="center">
-  <img src="https://i.imgur.com/emAFrL1.gif">  
+  <img src="https://i.imgur.com/emAFrL1.gif">  <img src="https://i.imgur.com/dGrmh2x.gif">
 </div>
 Ground Truth (Blue)         Model Segmentation (Red)
 < Complete Tumor Segmentation> 
