@@ -11,7 +11,7 @@
   <em align="center">Fig 2: Brain Core Tumor Segmention</em>
   <br>
   <br>
-  <em align="center">cf) Ground Truth (Blue) Model Segmentation (Red)></em>
+  <em align="center">cf) color.Set(color.FgMagenta, color.Bold) Ground Truth (Blue) Model Segmentation (Red)></em>
 </div>
 
 
