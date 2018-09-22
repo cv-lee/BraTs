@@ -4,13 +4,18 @@
 <div align="center">
   <img src="https://i.imgur.com/emAFrL1.gif">  <img src="https://i.imgur.com/dGrmh2x.gif">
   <br>
-  <em align="center">Fig 1: Brain Tumor Segmention</em>
+  <em align="center">Fig 1: Brain Complete Tumor Segmention</em>
   <br>
-  <em align="center">Ground Truth (Blue) Model Segmentation (Red)></em>
+  <img src="https://i.imgur.com/n0WAMwh.gif">  <img src="https://i.imgur.com/PFTwmVb.gif">
+  <br>
+  <em align="center">Fig 2: Brain Core Tumor Segmention</em>
+  <br>
+  <br>
+  <em align="center">cf) Ground Truth (Blue) Model Segmentation (Red)></em>
 </div>
 
 
-![](https://i.imgur.com/n0WAMwh.gif)  ![](https://i.imgur.com/PFTwmVb.gif)
+![]()  ![]()
 
 Ground Truth (Blue)         Model Segmentation (Red)
 < Core Tumor Segmentation >
