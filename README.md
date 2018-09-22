@@ -4,9 +4,10 @@
 <div align="center">
   <img src="https://i.imgur.com/emAFrL1.gif">  <img src="https://i.imgur.com/dGrmh2x.gif">
   <br>
-  <em align="center">Fig 1: Brain Tumor Segmention</em>  
+  <em align="center">Fig 1: Brain Tumor Segmention</em>
+  <br>
+  <em align="center">Ground Truth (Blue) Model Segmentation (Red)></em>
 </div>
-Ground Truth (Blue)         Model Segmentation (Red)
 
 
 ![](https://i.imgur.com/n0WAMwh.gif)  ![](https://i.imgur.com/PFTwmVb.gif)
