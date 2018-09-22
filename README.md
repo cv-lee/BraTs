@@ -2,11 +2,11 @@
 
 ### 1-1) Overview
 ![](https://i.imgur.com/emAFrL1.gif)  ![](https://i.imgur.com/dGrmh2x.gif)
-
+Ground Truth (Blue)         Model Segmentation (Red)
 < Complete Tumor Segmentation> 
 
 ![](https://i.imgur.com/n0WAMwh.gif)  ![](https://i.imgur.com/PFTwmVb.gif)
-
+Ground Truth (Blue)         Model Segmentation (Red)
 < Core Tumor Segmentation >
 
 ### 1-2) About
