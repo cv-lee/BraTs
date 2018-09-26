@@ -198,3 +198,8 @@ test.py
   <em align="center">Fig 3: Statistical Indices</em>
   <br>
 </div>
+
+
+# 6. Reference
+
+1. ![Automatic Brain Tumor Detection and Segmentation Using U-Net Based Fully Convolutional Networks arugmentation}(https://arxiv.org/pdf/1705.03820.pdf)
