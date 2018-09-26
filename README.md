@@ -101,7 +101,7 @@ channel 0: background*
 
 ![](https://i.imgur.com/6Ovl6Xd.png)
 
-### 2-3) Source Code
+### 2-3) Code
 
 ```bash
 data_preprocess.py
@@ -142,7 +142,7 @@ Bias Init: Initialized as 0
 
 <br>
 
-### 3-4) Source Code
+### 3-4) Code
 
 ```bash
 train.py
@@ -158,8 +158,6 @@ utils.py
 
 # 4. Test
 
-### 4-1) Source Code
-
 ```bash
 test.py
 ```
@@ -169,6 +167,34 @@ test.py
 <br>
 
 # 5. Result
-### 5-1) 3D Images
-### 5-2) 2D Images
-### 5-3) Statistical Index
+
+### 5-1) Prediction
+
+<div align="center">
+  <img src="https://i.imgur.com/emAFrL1.gif">  <img src="https://i.imgur.com/dGrmh2x.gif">
+  <br>
+  <em align="center">Fig 1: Brain Complete Tumor Segmention</em>
+  <br>
+  <img src="https://i.imgur.com/n0WAMwh.gif">  <img src="https://i.imgur.com/PFTwmVb.gif">
+  <br>
+  <em align="center">Fig 2: Brain Core Tumor Segmention</em>
+  <br>
+  <br>
+  <img src="https://placehold.it/15/1589F0/000000?text=+">
+  <em align="center">Ground Truth</em>
+  <br>
+  <img src="https://placehold.it/15/f03c15/000000?text=+">
+  <em align="center">Prediction</em>
+  <br>
+</div>
+
+<br>
+
+### 5-2) Statistical Indices
+
+<div align="center">
+  <img src="https://i.imgur.com/tI9PXLR.png">  
+  <br>
+  <em align="center">Fig 3: Statistical Indices</em>
+  <br>
+</div>
