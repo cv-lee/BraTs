@@ -11,9 +11,9 @@
   <em align="center">Fig 2: Brain Core Tumor Segmention</em>
   <br>
   <br>
-  <em align="center">![#f03c15](https://placehold.it/15/f03c15/000000?text=+)`Prediction`</em>
+  <em align="center"></em>
 </div>
-
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+)`Prediction`
 
 ### 1-2) About
 This project is a segmentation model to diagnose brain tumor (Complete, Core, Enhancing). 
