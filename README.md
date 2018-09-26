@@ -47,11 +47,11 @@ nii.gz*
 *Data Shape:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 240(Slide Width) × 240(Slide Height) × 155(Number of Slide) × 4(Multi-mode)*
 
-*Data Mode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-4(Multi-mode) 
+*Data Mode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4(Multi-mode)*
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-0: FLAIR, 1: T1, 2: T1c, 3: T2
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+channel 0: FLAIR, &nbsp; channel 1: T1, &nbsp; channel 2: T1c, &nbsp; channel 3: T2
 
 <div align="center">
   <img src="https://i.imgur.com/xXkKu2L.png">
