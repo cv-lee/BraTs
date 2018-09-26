@@ -1,6 +1,3 @@
-Some Markdown text with <span style="color:blue">some *blue* text</span>.
-
-
 # 1. BraTs
 
 ### 1-1) Overview
@@ -14,7 +11,7 @@ Some Markdown text with <span style="color:blue">some *blue* text</span>.
   <em align="center">Fig 2: Brain Core Tumor Segmention</em>
   <br>
   <br>
-  <em align="center"> cf) Ground Truth (Blue) Model Segmentation (Red)</em>
+  <em align="center"> ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `Prediction`</em>
 </div>
 
 
