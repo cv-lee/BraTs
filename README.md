@@ -74,7 +74,9 @@ dataset.py
 ```
 
 <br>
-`data_preprocess.py`: By using this code, original image('nii.gz', 240×240×155×4) can be diveded into 155 images of the specific mode('jpg', 240×240). Also, original label('nii.gz', 240×240×155) can be divided into 155 labels.
+
+`data_preprocess.py`: By using this code, original image(240×240×155×4) can be diveded into 155 image pieces(240×240) of the specific mode. Also, original label(240×240×155) can be divided into 155 label pieces.
+
 `dataset.py`:
 
 
