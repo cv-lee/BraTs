@@ -36,10 +36,7 @@ models/unet.py
 
 # 2. Dataset
 
-Multimodal MRI Dataset
-<div align="center">
-  <img src="https://i.imgur.com/xXkKu2L.png">
-</div>
+*Multimodal MRI Dataset*
 
 *File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 A File has Multi-Modal MRI Data of one person*
@@ -49,6 +46,13 @@ nii.gz*
 
 *Data Shape:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 240(Slide Width) × 240(Slide Height) × 155(Number of Slide) × 4(Multi-mode)*
+
+
+<div align="center">
+  <img src="https://i.imgur.com/xXkKu2L.png">
+</div>
+
+
 
 
 ```bash
