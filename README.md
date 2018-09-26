@@ -1,3 +1,5 @@
+<span style="color: green"> Some green text </span>
+
 # 1. BraTs
 
 ### 1-1) Overview
