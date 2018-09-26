@@ -157,13 +157,16 @@ utils.py
 <br>
 
 # 4. Test
+
+### 4-1) Source Code
+
 ```bash
 test.py
 ```
-### 4-1) Test
 
-### 4-2) Checkpoint
+`train.py`: Code for testing MRI inputs
 
+<br>
 
 # 5. Result
 ### 5-1) 3D Images
