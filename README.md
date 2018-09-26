@@ -35,10 +35,18 @@ models/unet.py
 
 
 # 2. Dataset
+
+Multimodal MRI Dataset
+![](https://i.imgur.com/xXkKu2L.png)
+
 ```bash
 data_preprocess.py
 dataset.py
 ```
+
+
+
+
 ### 2-1) Overview
 
 ### 2-2) Data Argumentation
