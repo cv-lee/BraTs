@@ -41,11 +41,11 @@ models/unet.py
   <img src="https://i.imgur.com/xXkKu2L.png">
 </div>
 
-Original File:            A File has one person Multi-Modal MRI Data
+Original File:<tab><tab>A File has Multi-Modal MRI Data of one person
 
-Original File Format:     nii.gz
+Original File Format:<tab>nii.gz
 
-Original Array Shape:     240(Slide Width), 240(Slide Height), 155(Number of Slide), 4(Multi-mode)
+Original Array Shape:<tab>240(Slide Width), 240(Slide Height), 155(Number of Slide), 4(Multi-mode)
 
 
 ```bash
