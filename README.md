@@ -122,11 +122,11 @@ dataset.py
 ### 3-1) Loss Function
 ![](https://i.imgur.com/aGUbIeU.png)
 
-![Dice Coefficient Loss](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient)
+[Dice Coefficient Loss](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient)
 
 
 ### 3-2) Optimizer
-![Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf)
+[Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf)
 
 ### 3-3) Hyperparameter
 learning rate = 1e-4
