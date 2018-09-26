@@ -67,12 +67,14 @@ channel 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 </div>
 
 <br>
+
 ```bash
 data_preprocess.py
 dataset.py
 ```
 
-
+`data_preprocess.py`
+`
 
 
 ### 2-1) Overview
