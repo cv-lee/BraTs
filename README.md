@@ -37,7 +37,9 @@ models/unet.py
 # 2. Dataset
 
 Multimodal MRI Dataset
-![](https://i.imgur.com/xXkKu2L.png)
+<div align="center">
+  <img src="https://i.imgur.com/xXkKu2L.png">
+</div>
 
 ```bash
 data_preprocess.py
