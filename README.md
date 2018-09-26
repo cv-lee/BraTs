@@ -41,11 +41,11 @@ Multimodal MRI Dataset
   <img src="https://i.imgur.com/xXkKu2L.png">
 </div>
 
-*File:       A File has Multi-Modal MRI Data of one person
+*File:       A File has Multi-Modal MRI Data of one person*
 
-*File Format: nii.gz
+*File Format: nii.gz*
 
-*Data Shape: 240(Slide Width), 240(Slide Height), 155(Number of Slide), 4(Multi-mode)
+*Data Shape: 240(Slide Width), 240(Slide Height), 155(Number of Slide), 4(Multi-mode)*
 
 
 ```bash
