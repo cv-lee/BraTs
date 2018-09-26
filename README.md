@@ -48,7 +48,7 @@ A File has Multi-Modal MRI Data of one person*
 nii.gz*
 
 *Data Shape:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-240(Slide Width), 240(Slide Height), 155(Number of Slide), 4(Multi-mode)*
+240(Slide Width) × 240(Slide Height) × 155(Number of Slide) × 4(Multi-mode)*
 
 
 ```bash
