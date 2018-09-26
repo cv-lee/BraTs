@@ -98,7 +98,7 @@ channel 0: background*
 
 ### 2-2) Data Argumentation
 
-![]https://i.imgur.com/yQmxilp.png
+![](https://i.imgur.com/yQmxilp.png)
 
 ### 2-3) Source Code
 
