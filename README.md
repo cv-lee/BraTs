@@ -14,7 +14,8 @@
   <img src="https://placehold.it/15/1589F0/000000?text=+">
   <em align="center">Ground Truth</em>
   <br>
-  <img src="https://placehold.it/15/f03c15/000000?text=+"> Prediction
+  <img src="https://placehold.it/15/f03c15/000000?text=+">\
+  <em align="center">Prediction</em>
   <br>
 </div>
 
