@@ -68,7 +68,7 @@ channel 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 
 <br>
 
-*Label Shape:&nbsp;&nbsp;&nbsp;&nbsp;
+*Label Shape:&nbsp;&nbsp;&nbsp;
 channel 0: background*
 
 *&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -91,7 +91,7 @@ dataset.py
 
 `data_preprocess.py`: By using this code, original image(240×240×155×4) can be diveded into 155 image pieces(240×240) of the specific mode. Also, original label(240×240×155) can be divided into 155 label pieces.
 
-`dataset.py`:
+`dataset.py`: Prepare dataset and dataloader for [Pytorch](https://pytorch.org/docs/stable/index.html) modules
 
 
 ### 2-1) Overview
