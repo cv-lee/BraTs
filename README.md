@@ -39,9 +39,9 @@ models/unet.py
 **Multimodal MRI Dataset**
 
 *File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-A File has Multi-Modal MRI Data of one person*
+&nbsp;&nbsp;&nbsp;A File has Multi-Modal MRI Data of one person*
 
-*File Format:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+*File Format:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 nii.gz*
 
 *Image Shape:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
