@@ -10,13 +10,10 @@
   <br>
   <em align="center">Fig 2: Brain Core Tumor Segmention</em>
   <br>
-  <br>
-  <em align="center">![#1589F0](https://placehold.it/15/1589F0/000000?text=+) `Ground Truth`</em>
-  <em align="center">![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `Prediction`</em>
 </div>
 
-![#1589F0](https://placehold.it/15/1589F0/000000?text=+) `Ground Truth`
-![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `Prediction`
+| ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) `Ground Truth`
+|![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `Prediction`
 
 
 ### 1-2) About
