@@ -120,10 +120,9 @@ dataset.py
 # 3. Train
 
 ### 3-1) Loss Function
-![](https://i.imgur.com/aGUbIeU.png)
-
 [Dice Coefficient Loss](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient)
 
+![](https://i.imgur.com/aGUbIeU.png)
 
 ### 3-2) Optimizer
 [Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf)
@@ -144,6 +143,12 @@ train.py
 utils.py
 ```
 
+`train.py`: Code for training model and getting several inputs
+
+`utils.py`: Code for loss Function, utils Functions, UI Functions, and etc
+
+<br>
+<br>
 
 # 4. Test
 ```bash
