@@ -14,8 +14,9 @@
   <em align="center"></em>
 </div>
 
-![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `#f03c15`
-![#1589F0](https://placehold.it/15/1589F0/000000?text=+) `#1589F0`
+![#1589F0](https://placehold.it/15/1589F0/000000?text=+) `Ground Truth`
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `Prediction`
+
 
 ### 1-2) About
 This project is a segmentation model to diagnose brain tumor (Complete, Core, Enhancing). 
