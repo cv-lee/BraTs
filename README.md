@@ -1,4 +1,5 @@
-# 1. BraTs (Brain Tumor Segmentation)
+# 1. BraTs 
+## Brain Tumor Segmentation
 
 ### 1-1) Overview
 <div align="center">
