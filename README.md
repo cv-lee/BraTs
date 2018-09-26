@@ -34,7 +34,12 @@ models/unet.py
 ![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
 
 
+
+
 # 2. Dataset
+
+
+### 2-1) Overview
 
 **Multimodal MRI Dataset**
 
@@ -82,6 +87,13 @@ channel 0: background*
 
 <br>
 
+
+### 2-2) Data Argumentation
+
+![]https://i.imgur.com/yQmxilp.png
+
+### 2-3) Source Code
+
 ```bash
 data_preprocess.py
 dataset.py
@@ -93,10 +105,6 @@ dataset.py
 
 `dataset.py`: Prepare dataset and dataloader for [Pytorch](https://pytorch.org/docs/stable/index.html) modules
 
-
-### 2-1) Overview
-
-### 2-2) Data Argumentation
 
 # 3. Train
 ```bash
