@@ -1,5 +1,4 @@
-![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `ffefef`
-
+<p style='color:red'>This is some red text.</p>
 # 1. BraTs
 
 ### 1-1) Overview
