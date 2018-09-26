@@ -41,7 +41,7 @@ Multimodal MRI Dataset
   <img src="https://i.imgur.com/xXkKu2L.png">
 </div>
 
-*File:       A File has Multi-Modal MRI Data of one person*
+*File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A File has Multi-Modal MRI Data of one person*
 
 *File Format: nii.gz*
 
