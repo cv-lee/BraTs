@@ -36,7 +36,7 @@ models/unet.py
 
 # 2. Dataset
 
-*Multimodal MRI Dataset*
+**Multimodal MRI Dataset**
 
 *File:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 A File has Multi-Modal MRI Data of one person*
@@ -66,9 +66,7 @@ channel 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="https://i.imgur.com/xXkKu2L.png">
 </div>
 
-
-
-
+<br>
 ```bash
 data_preprocess.py
 dataset.py
