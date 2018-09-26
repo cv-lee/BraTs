@@ -124,8 +124,12 @@ dataset.py
 
 ![](https://i.imgur.com/aGUbIeU.png)
 
+<br>
+
 ### 3-2) Optimizer
 [Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf)
+
+<br>
 
 ### 3-3) Hyperparameter
 learning rate = 1e-4
@@ -135,6 +139,8 @@ maximum number of epochs = 100
 Weights Init: Normal Distribution (mean:0, std:0.01)
 
 Bias Init: Initialized as 0
+
+<br>
 
 ### 3-4) Source Code
 
