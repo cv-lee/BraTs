@@ -44,10 +44,10 @@ A File has Multi-Modal MRI Data of one person*
 *File Format:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 nii.gz*
 
-*Data Shape:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+*Image Shape:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 240(Slide Width) × 240(Slide Height) × 155(Number of Slide) × 4(Multi-mode)*
 
-*Data Mode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+*Image Mode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 4 (Multi-mode)*
 
 <br>
@@ -66,8 +66,9 @@ channel 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="https://i.imgur.com/xXkKu2L.png">
 </div>
 
-*Data Label:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-0: background, 1: necrotic and non-enhancing tumor, 2: edema, 3: enhancing tumor*
+<br>
+*Label Shape:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+channel 0: background, channel 1: necrotic and non-enhancing tumor, channel 2: edema, channel 3: enhancing tumor*
 
 <br>
 
