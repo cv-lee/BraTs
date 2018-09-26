@@ -40,7 +40,6 @@ models/unet.py
 ![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
 
 
-
 <br>
 <br>
 
@@ -99,6 +98,8 @@ channel 0: background*
 ### 2-2) Data Argumentation
 
 ![](https://i.imgur.com/yQmxilp.png)
+
+![](https://i.imgur.com/6Ovl6Xd.png)
 
 ### 2-3) Source Code
 
