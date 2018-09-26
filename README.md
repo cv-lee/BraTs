@@ -21,9 +21,9 @@
 
 
 ### 1-2) About
+**This project is a segmentation model to diagnose brain tumor (Complete, Core) using BraTS 2016, 2017 dataset.**
 >[BraTS](http://www.med.upenn.edu/sbia/brats2018.html) has always been focusing on the evaluation of state-of-the-art methods for the segmentation of brain tumors in multimodal magnetic resonance imaging (MRI) scans. BraTS 2018 utilizes multi-institutional pre-operative MRI scans and focuses on the segmentation of intrinsically heterogeneous (in appearance, shape, and histology) brain tumors, namely gliomas. Furthemore, to pinpoint the clinical relevance of this segmentation task, BraTS’18 also focuses on the prediction of patient overall survival, via integrative analyses of radiomic features and machine learning algorithms.
 
-**This project is a segmentation model to diagnose brain tumor (Complete, Core) using BraTS 2016, 2017 dataset.**
 
 ### 1-3) U-Net
 
