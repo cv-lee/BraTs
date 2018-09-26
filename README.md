@@ -66,6 +66,9 @@ channel 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="https://i.imgur.com/xXkKu2L.png">
 </div>
 
+*Data Label:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0: background, 1: necrotic and non-enhancing tumor, 2: edema, 3: enhancing tumor*
+
 <br>
 
 ```bash
