@@ -1,2 +1,1 @@
-
-checkpoint folder
+*Model Checkpoint Folder*
