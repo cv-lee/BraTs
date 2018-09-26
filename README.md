@@ -1,5 +1,3 @@
-<span style="color: green"> Some green text </span>
-
 # 1. BraTs
 
 ### 1-1) Overview
@@ -18,7 +16,7 @@
 
 
 ### 1-2) About
-This project is a segmentation model (U-Net) to diagnose brain tumor (Complete, Core, Enhancing). 
+This project is a segmentation model to diagnose brain tumor (Complete, Core, Enhancing). 
 
 ### 1-3) U-Net
 
