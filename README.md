@@ -110,9 +110,9 @@ dataset.py
 
 <br>
 
-`data_preprocess.py`: By using this code, original image(240×240×155×4) can be diveded into 155 image pieces(240×240) of the specific mode. Also, original label(240×240×155) can be divided into 155 label pieces.
+`data_preprocess.py`: Code for data pre-processing. Using this, original image(240×240×155×4) can be diveded into 155 image pieces(240×240) of the specific mode. Also, original label(240×240×155) can be divided into 155 label pieces.
 
-`dataset.py`: Prepare dataset and dataloader for [Pytorch](https://pytorch.org/docs/stable/index.html) modules
+`dataset.py`: Code for Prepareing dataset and dataloader for [Pytorch](https://pytorch.org/docs/stable/index.html) modules
 
 <br>
 <br>
