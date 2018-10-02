@@ -157,4 +157,3 @@ def save_img(args, output):
         else:
             img = (img/1)*255
         cv2.imwrite(output_path, img)
-
