@@ -16,11 +16,10 @@ def test(args):
     testset = testGenerator(args)
 
     # Model Load
-    model = unet()
+    model = unet(args)
     model.load_weights(args.ckpt_path)
     results = model.predict_generator(testset, 1, verbose=1)
     save_img(args, results)
-    pdb.set_trace()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
@@ -30,10 +29,10 @@ if __name__ == "__main__":
                         help='batch size.')
     parser.add_argument('--threshold', type=float, default=0.2,
                         help='output threshold')
-    parser.add_argument('--data', type=str, default='enhancing',
+    parser.add_argument('--data', type=str, default='complete',
                         help='MRI Label data to train')
     parser.add_argument('--test_img_root', type=str,
-                        default='../data/train/image_T1C',
+                        default='../data/train/image_FLAIR',
                         help='the directory containing the train dataset.')
     parser.add_argument('--test_label_root', type=str,
                         default='../data/train/label')
