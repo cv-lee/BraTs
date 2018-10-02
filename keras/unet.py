@@ -29,7 +29,8 @@ def dice_coef(y_true, y_pred):
 def dice_coef_loss(y_true, y_pred):
     return 1-dice_coef(y_true, y_pred)
 
-def unet(input_size = (240,240,1)):
+
+def unet(args, input_size = (240,240,1)):
     inputs = Input(input_size)
     conv1 = Conv2D(32, (3, 3), activation='relu', padding='same',
                    kernel_initializer=initializers.random_normal(stddev=0.01))(inputs)
@@ -87,11 +88,15 @@ def unet(input_size = (240,240,1)):
     conv9 = Conv2D(32, (3, 3), activation='relu', padding='same',
                    kernel_initializer=initializers.random_normal(stddev=0.01))(conv9)
 
-    conv10 = Conv2D(2, (1, 1), activation='sigmoid',
+    conv10 = Conv2D(2, (1, 1), activation='relu',
                     kernel_initializer=initializers.random_normal(stddev=0.01))(conv9)
     conv10 = Activation('softmax')(conv10)
     model = Model(inputs=[inputs], outputs=[conv10])
 
-    model.compile(optimizer=Adam(lr=1e-4), loss=dice_coef_loss, metrics=[dice_coef])
+    try:
+        lr = args.lr
+    except:
+        lr = 1e-4
+    model.compile(optimizer=Adam(lr=lr), loss=dice_coef_loss, metrics=[dice_coef])
 
     return model
