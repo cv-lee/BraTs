@@ -1,17 +1,18 @@
-import numpy as np
-import os
-import skimage.io as io
-import skimage.transform as trans
-import numpy as np
 from keras.models import *
 from keras.layers import *
 from keras.optimizers import *
-from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as K
+from keras.callbacks import ModelCheckpoint
 
 
-def dice_coef(y_true, y_pred):
-    smooth = 1.0
+def dice_coef(y_true, y_pred, smooth=1.0):
+    ''' Dice Coefficient
+
+    Args:
+        y_true (np.array): Ground Truth Heatmap (Label)
+        y_pred (np.array): Prediction Heatmap
+    '''
+
     class_num = 2
     for i in range(class_num):
         y_true_f = K.flatten(y_true[:,:,:,i])
@@ -27,10 +28,24 @@ def dice_coef(y_true, y_pred):
 
 
 def dice_coef_loss(y_true, y_pred):
+    ''' Dice Coefficient Loss
+
+    Args:
+        y_true (np.array): Ground Truth Heatmap (Label)
+        y_pred (np.array): Prediction Heatmap
+    '''
     return 1-dice_coef(y_true, y_pred)
 
 
+
 def unet(args, input_size = (240,240,1)):
+    ''' U-Net
+
+    Ags:
+        args (argparse):    Arguments parsed in command-lind
+        input_size(tuple):  Model input size
+    '''
+
     inputs = Input(input_size)
     conv1 = Conv2D(32, (3, 3), activation='relu', padding='same',
                    kernel_initializer=initializers.random_normal(stddev=0.01))(inputs)
