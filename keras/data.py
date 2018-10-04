@@ -80,7 +80,6 @@ def dataset(args, mode='train',
                                            height_shift_range=0.1,
                                            shear_range=0.2,
                                            zoom_range=0.1)
-                                           #brightness_range=[0.8,1.2])
 
         label_datagen = ImageDataGenerator(rotation_range=20,
                                            horizontal_flip=True,
