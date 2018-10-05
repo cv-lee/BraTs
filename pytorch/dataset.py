@@ -207,7 +207,7 @@ class ValidSet(torch.utils.data.Dataset):
         label = label.astype(np.float32)
         label = np.concatenate((np.absolute(label-1) , label),axis=0)
         label = torch.from_numpy(label)
-        return self.totensor(img), label, img_path[idx]
+        return self.totensor(img), label, self.img_path[idx]
 
 
 class TestSet(torch.utils.data.Dataset):
