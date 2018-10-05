@@ -12,7 +12,7 @@ from torch.optim import SGD
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
-import config
+from config import *
 from dataset import *
 from models import *
 from utils import *
@@ -33,13 +33,15 @@ def train(args):
         load_model(args, class_num=config.class_num, mode='train')
 
     for epoch in range(start_epoch, args.epochs + 1):
+
         # Train Model
         print('\nEpoch: {}\n<Train>\n'.format(epoch))
         model.train(True)
         loss = 0
-        lr = args.lr * (0.1 ** (epoch // 30))
+        lr = args.lr * (0.5 ** (epoch // 5))
         for param_group in optimizer.param_groups:
             param_group["lr"] = lr
+        torch.set_grad_enabled(True)
         for idx, (inputs, targets, paths) in enumerate(trainloader):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = model(inputs)
@@ -55,12 +57,13 @@ def train(args):
         print('\n<Validation>\n')
         model.eval()
         loss = 0
+        torch.set_grad_enabled(False)
         for idx, (inputs, targets, paths) in enumerate(validloader):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = model(inputs)
             batch_loss = dice_coef(outputs, targets)
             loss += float(batch_loss)
-            progress_bar(idx, len(trainloader), 'Loss: %.5f, Dice-Coef: %.5f'
+            progress_bar(idx, len(validloader), 'Loss: %.5f, Dice-Coef: %.5f'
                          %((loss/(idx+1)), (1-(loss/(idx+1)))))
         loss /= (idx+1)
         score = 1 - loss
@@ -77,7 +80,7 @@ if __name__ == "__main__":
                         help="Model Trianing resume.")
     parser.add_argument("--batch_size", type=int, default=52,
                         help="The batch size to load the data")
-    parser.add_argument("--epochs", type=int, default=150,
+    parser.add_argument("--epochs", type=int, default=100,
                         help="The training epochs to run.")
     parser.add_argument("--lr", type=float, default=0.0001,
                         help="Learning rate to use in training")
