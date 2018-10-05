@@ -24,16 +24,29 @@ from PIL import Image, PILLOW_VERSION
 from scipy.ndimage.filters import gaussian_filter
 from scipy.ndimage.interpolation import map_coordinates
 
-def data_loader(args, mode='TRAIN'):
-    if mode == 'TRAIN':
-        shuffle = True
-    elif mode == 'TEST':
-        shuffle = False
-    else:
-        raise ValueError('data_loader flag ERROR')
+import config
 
-    dataset = Dataset(args, mode)
-    dataloader = DataLoader(Dataset(args, mode),
+def data_loader(args, mode):
+    # Data Flag Check
+    if args.data == 'complete' or args.data == 'core' or args.data == 'enhancing':
+        pass
+    else:
+        raise ValueError('args.data ERROR')
+
+    # Mode Flag Check 
+    if mode == 'train':
+        shuffle = True
+        dataset = TrainSet(args)
+    elif mode == 'valid':
+        shuffle = False
+        dataset = ValidSet(args)
+    elif mode == 'test':
+        shuffle = False
+        dataset = TestSet(args)
+    else:
+        raise ValueError('data_loader mode ERROR')
+
+    dataloader = DataLoader(dataset,
                             batch_size=args.batch_size,
                             num_workers=os.cpu_count(),
                             shuffle=shuffle,
@@ -41,13 +54,13 @@ def data_loader(args, mode='TRAIN'):
     return dataloader
 
 
-class Dataset(torch.utils.data.Dataset):
-    def __init__(self, args, mode):
-        self.mode = mode
+class TrainSet(torch.utils.data.Dataset):
+    def __init__(self, args):
         self.data = args.data
         self.img_root = args.img_root
         self.img_path1 = [] # tumor ratio > 5%
         self.img_path2 = [] # tumor ratio < 5%
+        self.label_root = args.label_root
         self.label_path1 = []
         self.label_path2 = []
 
@@ -60,101 +73,170 @@ class Dataset(torch.utils.data.Dataset):
                     ElasticTransform(alpha=720, sigma=24)])
         self.totensor = transforms.ToTensor()
 
+        if self.data == 'complete':
+            self.patch_threshold = config.complete_threshold
+            self.data_rate = config.complete_rate
+        elif self.data == 'core':
+            self.patch_threshold = config.core_threshold
+            self.data_rate = config.core_rate
+        else:
+            self.patch_threshold = config.enhancing_threshold
+            self.data_rate = config.core_rate
+
         img_path = []
-        label_path = []
         for folder_name in os.listdir(self.img_root):
             img_path += glob.glob(os.path.join(self.img_root, folder_name, "*.jpg"))
 
-        if self.mode == 'TRAIN':
-            self.label_root = args.label_root
-            for folder_name in os.listdir(self.label_root):
-                label_path += glob.glob(os.path.join(self.label_root, folder_name, "*.jpg"))
-            for i in range(len(img_path)):
-                label = cv2.imread(label_path[i], cv2.IMREAD_GRAYSCALE)
+        label_path = []
+        for folder_name in os.listdir(self.label_root):
+            label_path += glob.glob(os.path.join(self.label_root, folder_name, "*.jpg"))
 
-                if self.data == 'COMPLETE':
-                    tumor_ratio = (label>0).astype(np.uint8).sum()
-                elif self.data == 'CORE':
-                    l1 = (label>25).astype(np.uint8)
-                    l2 = (label<75).astype(np.uint8)
-                    label1 = np.logical_and(l1,l2).astype(np.uint8)
-                    l1 = (label>125).astype(np.uint8)
-                    l2 = (label<175).astype(np.uint8)
-                    label2 = np.logical_and(l1,l2).astype(np.uint8)
-                    tumor_ratio = (np.logical_or(label1,label2).astype(np.uint8)).sum()
-                    del label1, label2
-                elif self.data == 'ENHANCING':
-                    l1 = (label>125).astype(np.uint8)
-                    l2 = (label<175).astype(np.uint8)
-                    tumor_ratio = (np.logical_and(l1,l2).astype(np.uint8)).sum()
-                else:
-                    raise ValueError('Dataset FLAG ERROR')
-                tumor_ratio /= label.shape[0]*label.shape[1]
+        for i in range(len(img_path)):
+            label = cv2.imread(label_path[i], cv2.IMREAD_GRAYSCALE)
 
-                if tumor_ratio > 0.02: # CHANGE FOR ENHANCING
-                    self.label_path2.append(label_path[i])
-                    self.img_path2.append(img_path[i])
-                else:
-                    self.label_path1.append(label_path[i])
-                    self.img_path1.append(img_path[i])
-
-        elif self.mode == 'TEST':
-            self.img_path1 = img_path
-        else:
-            raise ValueError('Dataset FLAG ERROR')
-        print(len(self.img_path2))
-    def __len__(self):
-        if self.mode == 'TRAIN':
-            return len(self.img_path1) + len(self.img_path2)
-        else:
-            return len(self.img_path1)
-
-    def __getitem__(self, idx):
-        if self.mode == 'TRAIN':
-            if np.random.randint(1) == 0: # tumor ratio > 5% / CHANGE FOR ENHANCING
-                idx = np.random.randint(len(self.img_path1))
-                img_path = self.img_path1[idx]
-                label_path = self.label_path1[idx]
-            else: # tumor ratio < 5%
-                idx = np.random.randint(len(self.img_path2))
-                img_path = self.img_path2[idx]
-                label_path = self.label_path2[idx]
-
-            img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-            img = Image.fromarray(img)
-            label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
-            if self.data == 'COMPLETE':
-                label = (label>0).astype(np.uint8)
-            elif self.data == 'CORE':
+            if self.data == 'complete':
+                tumor_ratio = (label>25).astype(np.uint8).sum()
+            elif self.data == 'core':
                 l1 = (label>25).astype(np.uint8)
                 l2 = (label<75).astype(np.uint8)
                 label1 = np.logical_and(l1,l2).astype(np.uint8)
                 l1 = (label>125).astype(np.uint8)
                 l2 = (label<175).astype(np.uint8)
                 label2 = np.logical_and(l1,l2).astype(np.uint8)
-                label = np.logical_or(label1,label2).astype(np.uint8)
+                tumor_ratio = (np.logical_or(label1,label2).astype(np.uint8)).sum()
                 del label1, label2
-            elif self.data == 'ENHANCING':
+            else:
                 l1 = (label>125).astype(np.uint8)
                 l2 = (label<175).astype(np.uint8)
-                label = np.logical_and(l1,l2).astype(np.uint8)
+                tumor_ratio = (np.logical_and(l1,l2).astype(np.uint8)).sum()
+            tumor_ratio /= label.shape[0]*label.shape[1]
+
+            if tumor_ratio > self.patch_threshold: # CHANGE FOR ENHANCING
+                self.label_path2.append(label_path[i])
+                self.img_path2.append(img_path[i])
             else:
-                raise ValueError('Dataset FLAG ERROR')
-            label = Image.fromarray(label)
-            img, label = self.transform(img,label)
-            img = self.img_transform(img)
-            label = np.expand_dims(np.array(label), 0)
-            label = label.astype(np.float32)
-            label = np.concatenate((np.absolute(label-1) , label),axis=0)
-            label = torch.from_numpy(label)
-            return self.totensor(img), label, img_path
+                self.label_path1.append(label_path[i])
+                self.img_path1.append(img_path[i])
+
+    def __len__(self):
+        # TODO: Change len (ex. len(img_path2)*1.5)
+        return len(self.img_path1) + len(self.img_path2)
+
+    def __getitem__(self, idx):
+        if np.random.choice(2, 1, p=[1-self.data_rate, self.data_rate]) == 0:
+            idx = np.random.randint(len(self.img_path1))
+            img_path = self.img_path1[idx]
+            label_path = self.label_path1[idx]
         else:
-            img = cv2.imread(self.img_path1[idx], cv2.IMREAD_GRAYSCALE)
-            img = Image.fromarray(img)
-            return self.totensor(img), self.img_path1[idx]
+            idx = np.random.randint(len(self.img_path2))
+            img_path = self.img_path2[idx]
+            label_path = self.label_path2[idx]
+
+        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+        img = Image.fromarray(img)
+        label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
+        if self.data == 'complete':
+            label[label < 25] = 0
+            label[label >= 25] = 1
+            label = label.astype(np.uint8)
+        elif self.data == 'core':
+            l1 = (label>25).astype(np.uint8)
+            l2 = (label<75).astype(np.uint8)
+            label1 = np.logical_and(l1,l2).astype(np.uint8)
+            l1 = (label>125).astype(np.uint8)
+            l2 = (label<175).astype(np.uint8)
+            label2 = np.logical_and(l1,l2).astype(np.uint8)
+            label = np.logical_or(label1,label2).astype(np.uint8)
+            del label1, label2
+        else:
+            l1 = (label>125).astype(np.uint8)
+            l2 = (label<175).astype(np.uint8)
+            label = np.logical_and(l1,l2).astype(np.uint8)
+
+        label = Image.fromarray(label)
+        img, label = self.transform(img,label)
+        img = self.img_transform(img)
+        label = np.expand_dims(np.array(label), 0)
+        label = label.astype(np.float32)
+        label = np.concatenate((np.absolute(label-1) , label),axis=0)
+        label = torch.from_numpy(label)
+        return self.totensor(img), label, img_path
+
+
+class ValidSet(torch.utils.data.Dataset):
+    def __init__(self, args):
+        self.data = args.data
+        self.img_root = args.img_root
+        self.img_path = []
+        self.label_root = args.label_root
+        self.label_path = []
+        self.totensor = transforms.ToTensor()
+
+        for folder_name in os.listdir(self.img_root):
+            self.img_path += glob.glob(os.path.join(self.img_root, folder_name, "*.jpg"))
+        for folder_name in os.listdir(self.label_root):
+            self.label_path += glob.glob(os.path.join(self.label_root, folder_name, "*.jpg"))
+
+    def __len__(self):
+        return len(self.img_path)
+
+    def __getitem__(self, idx):
+        img = cv2.imread(self.img_path[idx], cv2.IMREAD_GRAYSCALE)
+        img = Image.fromarray(img)
+        label = cv2.imread(self.label_path[idx], cv2.IMREAD_GRAYSCALE)
+        if self.data == 'complete':
+            label[label < 25] = 0
+            label[label >= 25] = 1
+            label = label.astype(np.uint8)
+        elif self.data == 'core':
+            l1 = (label>25).astype(np.uint8)
+            l2 = (label<75).astype(np.uint8)
+            label1 = np.logical_and(l1,l2).astype(np.uint8)
+            l1 = (label>125).astype(np.uint8)
+            l2 = (label<175).astype(np.uint8)
+            label2 = np.logical_and(l1,l2).astype(np.uint8)
+            label = np.logical_or(label1,label2).astype(np.uint8)
+            del label1, label2
+        else:
+            l1 = (label>125).astype(np.uint8)
+            l2 = (label<175).astype(np.uint8)
+            label = np.logical_and(l1,l2).astype(np.uint8)
+
+        label = Image.fromarray(label)
+        label = np.expand_dims(np.array(label), 0)
+        label = label.astype(np.float32)
+        label = np.concatenate((np.absolute(label-1) , label),axis=0)
+        label = torch.from_numpy(label)
+        return self.totensor(img), label, img_path[idx]
+
+
+class TestSet(torch.utils.data.Dataset):
+    def __init__(self, args):
+        self.data = args.data
+        self.img_root = args.img_root
+        self.img_path = []
+        self.totensor = transforms.ToTensor()
+
+        for folder_name in os.listdir(self.img_root):
+            self.img_path += glob.glob(os.path.join(self.img_root, folder_name, "*.jpg"))
+
+    def __len__(self):
+        return len(self.img_path)
+
+    def __getitem__(self, idx):
+        img = cv2.imread(self.img_path[idx], cv2.IMREAD_GRAYSCALE)
+        img = Image.fromarray(img)
+        return self.totensor(img), self.img_path[idx]
 
 
 
+
+
+#############################################################
+#                                                           #
+#       Data Transforms Functions                           # 
+#                                                           #
+#############################################################
 
 '''
     From torchvision Transforms.py (+ Slightly changed)
@@ -677,4 +759,3 @@ def random_num_generator(config, random_state=np.random):
         print(config)
         raise Exception('unsupported format')
     return ret
-
