@@ -30,7 +30,6 @@ def test(args):
     model, optimizer, best_score, start_epoch = \
         load_model(args, class_num=config.class_num, mode='test')
 
-    # Loss Init
     unet.eval()
     for idx, (inputs, paths) in enumerate(testloader):
         inputs = inputs.to(device)
