@@ -1,15 +1,8 @@
+import pdb
 import torch
 import torch.nn as nn
-from torch.nn import init
-import torch.optim as optim
-import torch.nn.functional as F
-import torch.backends.cudnn as cudnn
-import pdb
-import torchvision
-import torch.tensor
+
 from torch.nn.functional import softmax
-from torchvision import datasets, transforms
-from torch.autograd import Variable
 
 
 def conv3x3(in_c, out_c, kernel_size=3, stride=1, padding=1, bias=True, useBN=False):
@@ -101,4 +94,3 @@ def test():
     print(y.size())
 
 #test()
-
