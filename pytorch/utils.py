@@ -3,12 +3,8 @@ import cv2
 import os
 import numpy as np
 import torch
-import torch.nn as nn
-import os
 import sys
 import time
-from torch.autograd import Function
-from torch.nn.functional import softmax
 
 
 _, term_width = os.popen('stty size', 'r').read().split()
@@ -19,29 +15,30 @@ last_time = time.time()
 begin_time = last_time
 
 
-def dice_coef(pred, target):
+def dice_coef(preds, targets):
     smooth = 1.0
-    class_num = pred.shape[1]
+    class_num = preds.shape[1]
     for i in range(class_num):
-        _pred = pred[:,i,:,:]
-        _target = target[:,i,:,:]
-        _intersection = (_pred * _target).sum()
-        _loss = 1 - ((2.0 * _intersection + smooth) / (_pred.sum() + _target.sum() + smooth))
+        pred_ = preds[:,i,:,:]
+        target = targets[:,i,:,:]
+        intersection = (pred * target).sum()
+        loss_ = 1 - ((2.0 * intersection + smooth) / (pred.sum() + target.sum() + smooth))
         if i == 0:
-            loss = _loss
+            loss = loss_
         else:
-            loss = loss + _loss
+            loss = loss + loss_
     loss = loss/class_num
     return loss
 
-def save_img(args, input, output, input_path, overlap=True):
-    input = (np.array(input.squeeze()).astype(np.float32)) * 255
-    input = np.expand_dims(input, axis=3)
-    input = np.concatenate((input,input,input), axis=3)
-    output = np.array(output.max(1)[1])*255
+
+def save_img(args, inputs, outputs, input_path, overlap=True):
+    inputs = (np.array(inputs.squeeze()).astype(np.float32)) * 255
+    inputs = np.expand_dims(inputs, axis=3)
+    inputs = np.concatenate((inputs,inputs,inputs), axis=3)
+    outputs = np.array(outputs.max(1)[1])*255
     kernel = np.ones((5,5),np.uint8)
 
-    for i in range(output.shape[0]):
+    for i in range(outputs.shape[0]):
         path = input_path[i].split('/')
         output_folder = os.path.join(args.output_root, path[-2])
         try:
@@ -50,13 +47,13 @@ def save_img(args, input, output, input_path, overlap=True):
             pass
         output_path = os.path.join(output_folder, path[-1])
         if overlap:
-            img = cv2.morphologyEx(output[i].astype(np.uint8), cv2.MORPH_OPEN, kernel)
+            img = cv2.morphologyEx(outputs[i].astype(np.uint8), cv2.MORPH_OPEN, kernel)
             img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
             img = np.expand_dims(img, axis=2)
             zeros = np.zeros(img.shape)
             img = np.concatenate((zeros,zeros,img), axis=2)
             img = np.array(img).astype(np.float32)
-            img = input[i] + img
+            img = inputs[i] + img
             if img.max() > 0:
                 img = (img/img.max())*255
             else:
@@ -65,6 +62,7 @@ def save_img(args, input, output, input_path, overlap=True):
         else:
             img = output[i]
             cv2.imwrite(output_path, img)
+
 
 class Checkpoint:
     def __init__(self, model, optimizer=None, epoch=0, best_score=1):
@@ -87,7 +85,6 @@ class Checkpoint:
                     "optimizer_state": self.optimizer.state_dict(),
                     "epoch": self.epoch,
                     "best_score": self.best_score}, path)
-
 
 
 def progress_bar(current, total, msg=None):
@@ -135,6 +132,7 @@ def progress_bar(current, total, msg=None):
     else:
         sys.stdout.write('\n')
     sys.stdout.flush()
+
 
 def format_time(seconds):
     ''' Source Code from 'kuangliu/pytorch-cifar'
