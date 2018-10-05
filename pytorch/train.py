@@ -1,16 +1,8 @@
-import shutil
 import argparse
 import pdb
 
-import numpy as np
 import torch
-import torch.nn as nn
 import torch.backends.cudnn as cudnn
-import torch.nn.functional as F
-
-from torch.optim import SGD
-from torchvision import transforms
-from torch.utils.data import DataLoader
 
 from config import *
 from dataset import *
