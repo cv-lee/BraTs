@@ -8,13 +8,14 @@ from .unet import *
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from utils import *
 
+import config
 
 def load_model(args, class_num, mode):
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    device = config.device
     model = UNet(class_num)
-    if mode == 'TRAIN':
+    if mode == 'train':
         optimizer = Adam(model.parameters(), lr=args.lr)
-    elif mode == 'TEST':
+    elif mode == 'test':
         optimizer = None
     else:
         raise ValueError('InValid Flag in load_model')
@@ -33,4 +34,3 @@ def load_model(args, class_num, mode):
         model = torch.nn.DataParallel(model)
         torch.backends.cudnn.benchmark=True
     return model, optimizer, best_score, start_epoch
-
