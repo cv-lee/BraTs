@@ -2,7 +2,7 @@
 
 ## TODO
 
-1. logging
+1. Logging
 2. 3D Viewer wrapping
 3. CRF
 4. Uncertainty
