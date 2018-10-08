@@ -2,10 +2,16 @@ import pdb
 import cv2
 import os
 import numpy as np
+import nibabel as nib
 import torch
 import sys
 import time
+import logging
+import logging.handlers
+import pydensecrf.densecrf as dcrf
 
+from pydensecrf.utils import compute_unary, create_pairwise_bilateral,\
+         create_pairwise_gaussian, softmax_to_unary, unary_from_softmax
 
 _, term_width = os.popen('stty size', 'r').read().split()
 term_width = int(term_width)
@@ -15,29 +21,96 @@ last_time = time.time()
 begin_time = last_time
 
 
-def dice_coef(preds, targets):
+def dice_coef(preds, targets, backprop=True):
     smooth = 1.0
-    class_num = preds.shape[1]
-    for i in range(class_num):
-        pred_ = preds[:,i,:,:]
-        target = targets[:,i,:,:]
-        intersection = (pred * target).sum()
-        loss_ = 1 - ((2.0 * intersection + smooth) / (pred.sum() + target.sum() + smooth))
+    class_num = 2
+    if backprop:
+        for i in range(class_num):
+            pred = preds[:,i,:,:]
+            target = targets[:,i,:,:]
+            intersection = (pred * target).sum()
+            loss_ = 1 - ((2.0 * intersection + smooth) / (pred.sum() + target.sum() + smooth))
+            if i == 0:
+                loss = loss_
+            else:
+                loss = loss + loss_
+        loss = loss/class_num
+        return loss
+    else:
+        # Need to generalize
+        targets = np.array(targets.argmax(1))
+        if len(preds.shape) > 3:
+            preds = np.array(preds).argmax(1)
+        for i in range(class_num):
+            pred = (preds==i).astype(np.uint8)
+            target= (targets==i).astype(np.uint8)
+            intersection = (pred * target).sum()
+            loss_ = 1 - ((2.0 * intersection + smooth) / (pred.sum() + target.sum() + smooth))
+            if i == 0:
+                loss = loss_
+            else:
+                loss = loss + loss_
+        loss = loss/class_num
+        return loss
+
+
+def get_crf_img(inputs, outputs):
+    for i in range(outputs.shape[0]):
+        img = inputs[i]
+        softmax_prob = outputs[i]
+        unary = unary_from_softmax(softmax_prob)
+        unary = np.ascontiguousarray(unary)
+        d = dcrf.DenseCRF(img.shape[0] * img.shape[1], 2)
+        d.setUnaryEnergy(unary)
+        feats = create_pairwise_gaussian(sdims=(10,10), shape=img.shape[:2])
+        d.addPairwiseEnergy(feats, compat=3, kernel=dcrf.DIAG_KERNEL,
+                            normalization=dcrf.NORMALIZE_SYMMETRIC)
+        feats = create_pairwise_bilateral(sdims=(50,50), schan=(20,20,20),
+                                          img=img, chdim=2)
+        d.addPairwiseEnergy(feats, compat=10, kernel=dcrf.DIAG_KERNEL,
+                            normalization=dcrf.NORMALIZE_SYMMETRIC)
+        Q = d.inference(5)
+        res = np.argmax(Q, axis=0).reshape((img.shape[0], img.shape[1]))
         if i == 0:
-            loss = loss_
+            crf = np.expand_dims(res,axis=0)
         else:
-            loss = loss + loss_
-    loss = loss/class_num
-    return loss
+            res = np.expand_dims(res,axis=0)
+            crf = np.concatenate((crf,res),axis=0)
+    return crf
 
 
-def save_img(args, inputs, outputs, input_path, overlap=True):
+def erode_dilate(outputs, kernel_size=7):
+    kernel = np.ones((kernel_size,kernel_size),np.uint8)
+    outputs = outputs.astype(np.uint8)
+    for i in range(outputs.shape[0]):
+        img = outputs[i]
+        img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+        img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+        outputs[i] = img
+    return outputs
+
+
+def post_process(args, inputs, outputs, input_path=None,
+                 crf_flag=True, erode_dilate_flag=True,
+                 save=True, overlap=True):
     inputs = (np.array(inputs.squeeze()).astype(np.float32)) * 255
     inputs = np.expand_dims(inputs, axis=3)
     inputs = np.concatenate((inputs,inputs,inputs), axis=3)
-    outputs = np.array(outputs.max(1)[1])*255
-    kernel = np.ones((5,5),np.uint8)
+    outputs = np.array(outputs)
 
+    # Conditional Random Field
+    if crf_flag:
+        outputs = get_crf_img(inputs, outputs)
+    else:
+        outputs = outputs.max(1)
+
+    # Erosion and Dilation
+    if erode_dilate_flag:
+        outputs = erode_dilate(outputs, kernel_size=7)
+    if save == False:
+        return outputs
+
+    outputs = output*255
     for i in range(outputs.shape[0]):
         path = input_path[i].split('/')
         output_folder = os.path.join(args.output_root, path[-2])
@@ -47,8 +120,7 @@ def save_img(args, inputs, outputs, input_path, overlap=True):
             pass
         output_path = os.path.join(output_folder, path[-1])
         if overlap:
-            img = cv2.morphologyEx(outputs[i].astype(np.uint8), cv2.MORPH_OPEN, kernel)
-            img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+            img = outputs[i]
             img = np.expand_dims(img, axis=2)
             zeros = np.zeros(img.shape)
             img = np.concatenate((zeros,zeros,img), axis=2)
@@ -60,8 +132,57 @@ def save_img(args, inputs, outputs, input_path, overlap=True):
                 img = (img/1) * 255
             cv2.imwrite(output_path, img)
         else:
-            img = output[i]
+            img = outputs[i]
             cv2.imwrite(output_path, img)
+    return None
+
+'''
+TODO: Need to fix
+def save_img(args, inputs, outputs, input_paths, overlap=True):
+    inputs = (np.array(inputs.squeeze()).astype(np.float32)) * 255
+    inputs = np.expand_dims(inputs, axis=3)
+    inputs = np.concatenate((inputs,inputs,inputs), axis=3)
+    inputs = np.expand_dims(inputs, axis=3)
+    outputs = np.array(outputs.max(1)[1])*255
+    kernel = np.ones((5,5),np.uint8)
+
+    for i, path in enumerate(input_paths):
+        path = path.split('/')[-2]
+        if i == 0:
+            compare = path
+        else:
+            if compare != path:
+                raise ValueError('Output Merge Fail')
+            pass
+
+    final_img = None
+    output_path = os.path.join(args.output_root, path+'.nii.gz')
+    for i in range(outputs.shape[0]):
+        if overlap:
+            img = cv2.morphologyEx(outputs[i].astype(np.uint8), cv2.MORPH_OPEN, kernel)
+            img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+            img = np.expand_dims(img, axis=2)
+            zeros = np.zeros(img.shape)
+            img = np.concatenate((zeros,zeros,img), axis=2)
+            img = np.expand_dims(img, axis=2)
+            img = np.array(img).astype(np.float32)
+            img = inputs[i] + img
+            if img.max() > 0:
+                img = (img/img.max())*255
+            else:
+                img = (img/1) * 255
+            img = np.expand_dims(img, axis=3)
+            if i == 0:
+                final_img = img
+            else:
+                final_img = np.concatenate((final_img,img),axis=3)
+        else:
+            img = output[i]
+    output_path = os.path.join(args.output_root, path)
+    final_img = nib.Nifti1Pair(final_img, np.eye(4))
+    nib.save(final_img, output_path)
+    print(output_path)
+'''
 
 
 class Checkpoint:
@@ -168,3 +289,16 @@ def format_time(seconds):
     if f == '':
         f = '0ms'
     return f
+
+
+def get_logger(level="DEBUG", file_level="DEBUG"):
+    logger = logging.getLogger(None)
+    logger.setLevel(level)
+    fomatter = logging.Formatter(
+            '%(asctime)s  [%(levelname)s]  %(message)s  (%(filename)s:  %(lineno)s)')
+    fileHandler = logging.handlers.TimedRotatingFileHandler(
+            'result.log', when='d', encoding='utf-8')
+    fileHandler.setLevel(file_level)
+    fileHandler.setFormatter(fomatter)
+    logger.addHandler(fileHandler)
+    return logger
