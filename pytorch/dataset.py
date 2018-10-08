@@ -176,6 +176,8 @@ class ValidSet(torch.utils.data.Dataset):
             self.img_path += glob.glob(os.path.join(self.img_root, folder_name, "*.jpg"))
         for folder_name in os.listdir(self.label_root):
             self.label_path += glob.glob(os.path.join(self.label_root, folder_name, "*.jpg"))
+        self.img_path = sorted(self.img_path)
+        self.label_path = sorted(self.label_path)
 
     def __len__(self):
         return len(self.img_path)
@@ -219,6 +221,7 @@ class TestSet(torch.utils.data.Dataset):
 
         for folder_name in os.listdir(self.img_root):
             self.img_path += glob.glob(os.path.join(self.img_root, folder_name, "*.jpg"))
+        self.img_path = sorted(self.img_path)
 
     def __len__(self):
         return len(self.img_path)
