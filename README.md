@@ -39,7 +39,12 @@
 pytorch/models/unet.py
 ```
 
-![](https://i.imgur.com/OXtVFvT.png)
+<div align="center">
+  <img src="https://i.imgur.com/OXtVFvT.png">
+  <br>
+  <em align="center">Fig 3: U-Net Diagram </em>
+  <br>
+</div>
 
 <br>
 <br>
@@ -50,7 +55,12 @@ pytorch/models/unet.py
 pytorch/models/pspnet.py
 ```
 
-![](https://i.imgur.com/y8M2IzT.png)
+<div align="center">
+  <img src="https://i.imgur.com/y8M2IzT.png">
+  <br>
+  <em align="center">Fig 4: PSPNet Diagram </em>
+  <br>
+</div>
 
 <br>
 <br>
@@ -61,7 +71,12 @@ pytorch/models/pspnet.py
 pytorch/models/deeplab.py
 ```
 
-![](https://i.imgur.com/5IBKzDx.png)
+<div align="center">
+  <img src="https://i.imgur.com/5IBKzDx.png">
+  <br>
+  <em align="center">Fig 5: DeepLab V3+ Diagram </em>
+  <br>
+</div>
 
 <br>
 <br>
