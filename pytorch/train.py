@@ -25,6 +25,8 @@ def train(args):
     # Model Load
     model, optimizer, best_score, start_epoch =\
         load_model(args, class_num=config.class_num, mode='train')
+    log_msg = '\n'.join(['%s Train Start'%(args.model)])
+    logging.info(log_msg)
 
     for epoch in range(start_epoch, start_epoch+args.epochs):
 
@@ -38,7 +40,9 @@ def train(args):
         torch.set_grad_enabled(True)
         for idx, (inputs, targets, paths) in enumerate(trainloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs,_ = model(inputs)
+            outputs = model(inputs)
+            if type(outputs) == type(tuple):
+                outputs = outputs[0]
             batch_loss = dice_coef(outputs, targets)
             optimizer.zero_grad()
             batch_loss.backward()
@@ -57,7 +61,9 @@ def train(args):
         torch.set_grad_enabled(False)
         for idx, (inputs, targets, paths) in enumerate(validloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs, _ = model(inputs)
+            outputs = model(inputs)
+            if type(outputs) == type(tuple):
+                outputs = outputs[0]
             #outputs = post_process(args, inputs, outputs, save=False)
             batch_loss = dice_coef(outputs, targets, backprop=False)
             loss += float(batch_loss)
@@ -71,7 +77,7 @@ def train(args):
         score = 1 - loss
         if score > best_score:
             checkpoint = Checkpoint(model, optimizer, epoch, score)
-            checkpoint.save(args.ckpt_path)
+            checkpoint.save(os.path.join(args.ckpt_root, args.model+'.tar'))
             best_score = score
             print("Saving...")
 
@@ -80,8 +86,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--resume", type=bool, default=False,
                         help="Model Trianing resume.")
-    parser.add_argument("--model", type=str, default='pspnet',
-                        help="Model Name")
+    parser.add_argument("--model", type=str, default='deeplab',
+                        help="Model Name (unet, pspnet_squeeze, pspnet_res18,\
+                        pspnet_res34, pspnet_res50, deeplab)")
     parser.add_argument("--batch_size", type=int, default=80,
                         help="The batch size to load the data")
     parser.add_argument("--epochs", type=int, default=30,
@@ -96,8 +103,8 @@ if __name__ == "__main__":
                         help="The directory containing the training label datgaset")
     parser.add_argument("--output_root", type=str, default="./output/prediction",
                         help="The directory containing the result predictions")
-    parser.add_argument("--ckpt_path", type=str, default="./checkpoint/model.tar",
-                        help="The directory containing the training label datgaset")
+    parser.add_argument("--ckpt_root", type=str, default="./checkpoint",
+                        help="The directory containing the checkpoint files")
     args = parser.parse_args()
 
     train(args)
