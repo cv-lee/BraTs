@@ -248,3 +248,10 @@ pytorch/test.py
 # 6. Reference
 
 [1] [Automatic Brain Tumor Detection and Segmentation Using U-Net Based Fully Convolutional Networks arugmentation](https://arxiv.org/pdf/1705.03820.pdf)
+
+[2] [U-Net: Convolutional Networks for Biomedical Image Segmentation](https://arxiv.org/pdf/1505.04597.pdf)
+
+[3] [Pyramid Scene Parsing Network](https://arxiv.org/pdf/1612.01105.pdf)
+
+[4] [Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation](https://arxiv.org/pdf/1802.02611.pdf)
+
