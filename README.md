@@ -50,7 +50,7 @@ pytorch/models/unet.py
 pytorch/models/pspnet.py
 ```
 
-![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
+![](https://i.imgur.com/y8M2IzT.png)
 
 <br>
 <br>
