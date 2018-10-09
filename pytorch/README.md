@@ -1,5 +1,7 @@
 # Pytorch ver.
 
+  - Support SOTA models ( U-Net, PSPNet, DeepLabV3+ )
+
 ## TODO
 
   1. ~~Logging~~
