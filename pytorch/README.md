@@ -4,7 +4,7 @@
 
   1. ~~Logging~~
 
-  2. ~~SOTA Model (PSPNet)~~
+  2. ~~SOTA Model (PSPNet, DeepLabV3+)~~
   
   3. ~~CRF~~
   
