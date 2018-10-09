@@ -6,7 +6,7 @@ from torch.optim import Adam, SGD
 
 from .unet import *
 from .pspnet import *
-
+from .deeplab import *
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from utils import *
@@ -15,31 +15,40 @@ import config
 
 def load_model(args, class_num, mode):
 
+    # Device Init
     device = config.device
 
+    # Model Init
     if args.model == 'unet':
-        model = UNet(class_num)
-    elif args.model == 'pspnet':
-        #model = PSPNet(sizes=(1,2,3,6), psp_size=2048, deep_features_size=1024,
-        #               backend='resnet50')
-        model = PSPNet(sizes=(1,2,3,6), psp_size=512, deep_features_size=256,
-                       backend='resnet18')
+        net = UNet(class_num)
+    elif args.model == 'pspnet_squeeze':
+        net = pspnet_squeeze()
+    elif args.model == 'pspnet_res18':
+        net = pspnet_res18()
+    elif args.model == 'pspnet_res34':
+        net = pspnet_res34()
+    elif args.model == 'pspnet_res50':
+        net = pspnet_res50()
+    elif args.model == 'deeplab':
+        net = Deeplab_V3_Plus()
     else:
         raise ValueError('args.model ERROR')
 
+    # Optimizer Init
     if mode == 'train':
         resume = args.resume
-        #optimizer = Adam(model.parameters(), lr=args.lr)
-        optimizer = SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4)
+        #optimizer = Adam(net.parameters(), lr=args.lr)
+        optimizer = SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4)
     elif mode == 'test':
         resume = True
         optimizer = None
     else:
         raise ValueError('load_model mode ERROR')
 
+    # Model Load
     if resume:
-        checkpoint = Checkpoint(model, optimizer)
-        checkpoint.load(args.ckpt_path)
+        checkpoint = Checkpoint(net, optimizer)
+        checkpoint.load(os.path.join(args.ckpt_root, args.model+'.tar'))
         best_score = checkpoint.best_score
         start_epoch = checkpoint.epoch+1
     else:
@@ -47,8 +56,8 @@ def load_model(args, class_num, mode):
         start_epoch = 1
 
     if device == 'cuda':
-        model.cuda()
-        model = torch.nn.DataParallel(model)
+        net.cuda()
+        net = torch.nn.DataParallel(net)
         torch.backends.cudnn.benchmark=True
 
-    return model, optimizer, best_score, start_epoch
+    return net, optimizer, best_score, start_epoch
