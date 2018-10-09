@@ -1,5 +1,5 @@
 # Keras ver.
 
   - Pytorch support for various SOTA Models :)
-  - Only support for U-Net
+  - Keras only support for U-Net
 
