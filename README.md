@@ -166,8 +166,6 @@ pytorch/dataset.py
 
 ![](https://i.imgur.com/aGUbIeU.png)
 
-<br>
-
 ### 3-2) Optimizer
 [Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf)
 
