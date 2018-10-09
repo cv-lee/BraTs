@@ -2,9 +2,11 @@ import os
 import sys
 
 import torch
-from torch.optim import Adam
+from torch.optim import Adam, SGD
 
 from .unet import *
+from .pspnet import *
+
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from utils import *
@@ -14,11 +16,21 @@ import config
 def load_model(args, class_num, mode):
 
     device = config.device
-    model = UNet(class_num)
+
+    if args.model == 'unet':
+        model = UNet(class_num)
+    elif args.model == 'pspnet':
+        #model = PSPNet(sizes=(1,2,3,6), psp_size=2048, deep_features_size=1024,
+        #               backend='resnet50')
+        model = PSPNet(sizes=(1,2,3,6), psp_size=512, deep_features_size=256,
+                       backend='resnet18')
+    else:
+        raise ValueError('args.model ERROR')
 
     if mode == 'train':
         resume = args.resume
-        optimizer = Adam(model.parameters(), lr=args.lr)
+        #optimizer = Adam(model.parameters(), lr=args.lr)
+        optimizer = SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4)
     elif mode == 'test':
         resume = True
         optimizer = None
