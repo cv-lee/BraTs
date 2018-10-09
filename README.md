@@ -39,7 +39,7 @@
 pytorch/models/unet.py
 ```
 
-![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
+![](https://i.imgur.com/BIAYeL6.png)
 
 <br>
 <br>
