@@ -13,7 +13,7 @@ from utils import *
 
 def train(args):
 
-    # Variables Init
+    # Variables and logger Init
     device = config.device
     cudnn.benchmark = True
     get_logger()
@@ -23,7 +23,7 @@ def train(args):
     validloader = data_loader(args, mode='valid')
 
     # Model Load
-    model, optimizer, best_score, start_epoch =\
+    net, optimizer, best_score, start_epoch =\
         load_model(args, class_num=config.class_num, mode='train')
     log_msg = '\n'.join(['%s Train Start'%(args.model)])
     logging.info(log_msg)
@@ -32,7 +32,7 @@ def train(args):
 
         # Train Model
         print('\nEpoch: {}\n<Train>\n'.format(epoch))
-        model.train(True)
+        net.train(True)
         loss = 0
         lr = args.lr * (0.5 ** (epoch // 4))
         for param_group in optimizer.param_groups:
@@ -40,8 +40,8 @@ def train(args):
         torch.set_grad_enabled(True)
         for idx, (inputs, targets, paths) in enumerate(trainloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs = model(inputs)
-            if type(outputs) == type(tuple):
+            outputs = net(inputs)
+            if type(outputs) == tuple:
                 outputs = outputs[0]
             batch_loss = dice_coef(outputs, targets)
             optimizer.zero_grad()
@@ -56,13 +56,13 @@ def train(args):
 
         # Validate Model
         print('\n<Validation>\n')
-        model.eval()
+        net.eval()
         loss = 0
         torch.set_grad_enabled(False)
         for idx, (inputs, targets, paths) in enumerate(validloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs = model(inputs)
-            if type(outputs) == type(tuple):
+            outputs = net(inputs)
+            if type(outputs) == tuple:
                 outputs = outputs[0]
             #outputs = post_process(args, inputs, outputs, save=False)
             batch_loss = dice_coef(outputs, targets, backprop=False)
@@ -76,7 +76,7 @@ def train(args):
         loss /= (idx+1)
         score = 1 - loss
         if score > best_score:
-            checkpoint = Checkpoint(model, optimizer, epoch, score)
+            checkpoint = Checkpoint(net, optimizer, epoch, score)
             checkpoint.save(os.path.join(args.ckpt_root, args.model+'.tar'))
             best_score = score
             print("Saving...")
