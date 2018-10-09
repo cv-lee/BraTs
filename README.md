@@ -33,7 +33,7 @@
 
 ### 1-3) Models
 
-####  - U-Net
+  - U-Net
 
 ```bash
 pytorch/models/unet.py
@@ -44,7 +44,7 @@ pytorch/models/unet.py
 <br>
 <br>
 
-#### - PSPNet
+  - PSPNet
 
 ```bash
 pytorch/models/pspnet.py
@@ -55,7 +55,7 @@ pytorch/models/pspnet.py
 <br>
 <br>
 
-#### - DeepLab V3 +
+ - DeepLab V3 +
 
 ```bash
 pytorch/models/deeplab.py
