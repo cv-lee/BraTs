@@ -166,24 +166,24 @@ pytorch/dataset.py
 # 3. Train
 
 ### 3-1) Loss Function
-[Dice Coefficient Loss](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient)
+  [Dice Coefficient Loss](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient)
 
 ![](https://i.imgur.com/aGUbIeU.png)
 
 ### 3-2) Optimizer
-[Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf)
+  [Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf)
 
-[Stochastic Gradient Descent](https://en.wikipedia.org/wiki/Stochastic_gradient_descent)
-<br>
+  [Stochastic Gradient Descent](https://en.wikipedia.org/wiki/Stochastic_gradient_descent)
+  <br>
 
 ### 3-3) Hyperparameter
-learning rate = 1e-4
+  learning rate = 1e-4
 
-maximum number of epochs = 100
+  maximum number of epochs = 100
 
-Weights Init: Normal Distribution (mean:0, std:0.01)
-
-Bias Init: Initialized as 0
+  Weights Init: Normal Distribution (mean:0, std:0.01)
+  
+  Bias Init: Initialized as 0
 
 <br>
 
