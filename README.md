@@ -171,6 +171,7 @@ pytorch/dataset.py
 ### 3-2) Optimizer
 [Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf)
 
+[Stochastic Gradient Descent](https://en.wikipedia.org/wiki/Stochastic_gradient_descent)
 <br>
 
 ### 3-3) Hyperparameter
