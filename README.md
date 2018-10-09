@@ -33,16 +33,18 @@
 
 ### 1-3) Models
 
+#### U-Net
+
 ```bash
 pytorch/models/unet.py
 ```
 
 ![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
 
-< U-Net >
+<br>
+<br>
 
-<br>
-<br>
+#### PSPNet
 
 ```bash
 pytorch/models/pspnet.py
@@ -50,10 +52,10 @@ pytorch/models/pspnet.py
 
 ![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
 
-< PSPNet >
+<br>
+<br>
 
-<br>
-<br>
+#### DeepLab V3 +
 
 ```bash
 pytorch/models/deeplab.py
