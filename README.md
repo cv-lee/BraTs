@@ -33,7 +33,7 @@
 
 ### 1-3) Models
 
-  - U-Net
+  - **U-Net**
 
 ```bash
 pytorch/models/unet.py
@@ -42,6 +42,7 @@ pytorch/models/unet.py
 <div align="center">
   <img src="https://i.imgur.com/OXtVFvT.png">
   <br>
+  <br>
   <em align="center">Fig 3: U-Net Diagram </em>
   <br>
 </div>
@@ -49,7 +50,7 @@ pytorch/models/unet.py
 <br>
 <br>
 
-  - PSPNet
+  - **PSPNet**
 
 ```bash
 pytorch/models/pspnet.py
@@ -58,6 +59,7 @@ pytorch/models/pspnet.py
 <div align="center">
   <img src="https://i.imgur.com/y8M2IzT.png">
   <br>
+  <br>
   <em align="center">Fig 4: PSPNet Diagram </em>
   <br>
 </div>
@@ -65,7 +67,7 @@ pytorch/models/pspnet.py
 <br>
 <br>
 
- - DeepLab V3 +
+ - **DeepLab V3 +**
 
 ```bash
 pytorch/models/deeplab.py
@@ -73,6 +75,7 @@ pytorch/models/deeplab.py
 
 <div align="center">
   <img src="https://i.imgur.com/5IBKzDx.png">
+  <br>
   <br>
   <em align="center">Fig 5: DeepLab V3+ Diagram </em>
   <br>
