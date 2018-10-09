@@ -102,7 +102,7 @@ def post_process(args, inputs, outputs, input_path=None,
     if crf_flag:
         outputs = get_crf_img(inputs, outputs)
     else:
-        outputs = outputs.max(1)
+        outputs = outputs.argmax(1)
 
     # Erosion and Dilation
     if erode_dilate_flag:
@@ -110,7 +110,7 @@ def post_process(args, inputs, outputs, input_path=None,
     if save == False:
         return outputs
 
-    outputs = output*255
+    outputs = outputs*255
     for i in range(outputs.shape[0]):
         path = input_path[i].split('/')
         output_folder = os.path.join(args.output_root, path[-2])
