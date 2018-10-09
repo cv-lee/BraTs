@@ -1,6 +1,6 @@
 # Pytorch ver.
 
-  - Support SOTA models ( U-Net, PSPNet, DeepLabV3+ )
+  - Support SOTA models ( U-Net, PSPNet, and DeepLabV3+ )
 
 ## TODO
 
