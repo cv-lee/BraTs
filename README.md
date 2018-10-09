@@ -61,9 +61,7 @@ pytorch/models/pspnet.py
 pytorch/models/deeplab.py
 ```
 
-![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
-
-< DeepLab V3+ >
+![](https://i.imgur.com/5IBKzDx.png)
 
 <br>
 <br>
