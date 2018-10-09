@@ -32,13 +32,13 @@ def train(args):
         print('\nEpoch: {}\n<Train>\n'.format(epoch))
         model.train(True)
         loss = 0
-        lr = args.lr * (0.5 ** (epoch // 3))
+        lr = args.lr * (0.5 ** (epoch // 4))
         for param_group in optimizer.param_groups:
             param_group["lr"] = lr
         torch.set_grad_enabled(True)
         for idx, (inputs, targets, paths) in enumerate(trainloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs = model(inputs)
+            outputs,_ = model(inputs)
             batch_loss = dice_coef(outputs, targets)
             optimizer.zero_grad()
             batch_loss.backward()
@@ -57,7 +57,7 @@ def train(args):
         torch.set_grad_enabled(False)
         for idx, (inputs, targets, paths) in enumerate(validloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs = model(inputs)
+            outputs, _ = model(inputs)
             #outputs = post_process(args, inputs, outputs, save=False)
             batch_loss = dice_coef(outputs, targets, backprop=False)
             loss += float(batch_loss)
@@ -80,11 +80,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--resume", type=bool, default=False,
                         help="Model Trianing resume.")
-    parser.add_argument("--batch_size", type=int, default=52,
+    parser.add_argument("--model", type=str, default='pspnet',
+                        help="Model Name")
+    parser.add_argument("--batch_size", type=int, default=80,
                         help="The batch size to load the data")
-    parser.add_argument("--epochs", type=int, default=10,
+    parser.add_argument("--epochs", type=int, default=30,
                         help="The training epochs to run.")
-    parser.add_argument("--lr", type=float, default=0.0001,
+    parser.add_argument("--lr", type=float, default=0.001,
                         help="Learning rate to use in training")
     parser.add_argument("--data", type=str, default="complete",
                         help="Label data type.")
