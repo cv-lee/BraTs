@@ -145,8 +145,8 @@ Bias Init: Initialized as 0
 ### 3-4) Code
 
 ```bash
-train.py
-utils.py
+pytorch/train.py
+pytorch/utils.py
 ```
 
 `train.py`: Code for training model and getting several inputs
@@ -159,7 +159,7 @@ utils.py
 # 4. Test
 
 ```bash
-test.py
+pytorch/test.py
 ```
 
 `test.py`: Code for testing MRI inputs
