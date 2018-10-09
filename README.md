@@ -39,7 +39,7 @@
 pytorch/models/unet.py
 ```
 
-![](https://i.imgur.com/BIAYeL6.png)
+![](https://i.imgur.com/OXtVFvT.png)
 
 <br>
 <br>
