@@ -34,7 +34,7 @@
 ### 1-3) U-Net
 
 ```bash
-models/unet.py
+pytorch/models/unet.py
 ```
 
 ![](https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png)
@@ -104,13 +104,13 @@ channel 0: background*
 ### 2-3) Code
 
 ```bash
-data_preprocess.py
-dataset.py
+pytorch/preprocess.py
+pytorch/dataset.py
 ```
 
 <br>
 
-`data_preprocess.py`: Code for data pre-processing. Using this, original image(240×240×155×4) can be diveded into 155 image pieces(240×240) of the specific mode. Also, original label(240×240×155) can be divided into 155 label pieces.
+`preprocess.py`: Code for data pre-processing. Using this, original image(240×240×155×4) can be diveded into 155 image pieces(240×240) of the specific mode. Also, original label(240×240×155) can be divided into 155 label pieces.
 
 `dataset.py`: Code for Prepareing dataset and dataloader for [Pytorch](https://pytorch.org/docs/stable/index.html) modules
 
@@ -162,7 +162,7 @@ utils.py
 test.py
 ```
 
-`train.py`: Code for testing MRI inputs
+`test.py`: Code for testing MRI inputs
 
 <br>
 
