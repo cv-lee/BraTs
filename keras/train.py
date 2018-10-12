@@ -12,9 +12,8 @@ def train(args):
 
     # Model Load
     model = unet(args)
-    model_checkpoint = ModelCheckpoint(args.ckpt_path,
-                                       monitor='val_loss', verbose=2,
-                                       save_best_only=True)
+    model_checkpoint = ModelCheckpoint(args.ckpt_path, monitor='val_loss',
+                                       verbose=2, save_best_only=True)
     # Model Train
     model.fit_generator(trainset, steps_per_epoch=500, shuffle=True, epochs=args.epoch,
                         validation_data=validset, validation_steps=2000,
@@ -28,7 +27,7 @@ if __name__ == "__main__":
                         help='batch size.')
     parser.add_argument('--lr', type=float, default=0.0001,
                         help='starting learning_rate')
-    parser.add_argument('--epoch', type=int, default=2,
+    parser.add_argument('--epoch', type=int, default=20,
                         help='number of epochs.')
     parser.add_argument('--data', type=str, default='complete',
                         help='MRI Label data to train')
