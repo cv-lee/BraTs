@@ -14,7 +14,7 @@ def test(args):
     model.load_weights(args.ckpt_path)
 
     # Model Test
-    results = model.predict_generator(testset, 1, verbose=1)
+    results = model.predict_generator(testset, steps=1, verbose=1)
 
     # Save predictions
     save_result(args, results)
@@ -30,9 +30,9 @@ if __name__ == "__main__":
                         help='the root directory containing the image dataset.')
     parser.add_argument('--label_root', type=str, default='../data/train/label',
                         help='the root directory containing the label dataset')
-    parser.add_argument('--image_folder1', type=str, default='BRATS_387',
+    parser.add_argument('--image_folder1', type=str, default='BRATS_074',
                         help='the directory containing the image dataset.')
-    parser.add_argument('--label_folder1', type=str, default='BRATS_387',
+    parser.add_argument('--label_folder1', type=str, default='BRATS_074',
                         help='the directory containing the label dataset.')
     parser.add_argument('--output_root', type=str, default='./output',
                         help='the directory to save results')
