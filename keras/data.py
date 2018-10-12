@@ -13,13 +13,14 @@ def adjustData(img, label, data, cnt, val='F'):
     Args:
         img   (np.array):   Augmented images
         label (np.array):   Augmented labels
-        data  (str):        Data Flag for train or test
-        cnt   (int):        Data identification
+        data  (str):        Data Flag
+        cnt   (int):        Data Identification
+        val   (str):        Data Folder Flag
     '''
     # To Save Augmented iamges and labels
-    for i in range(img.shape[0]):
-        cv2.imwrite('./augment/'+val+'_'+ str(cnt+i)+'_img.jpg',img[i,:,:])
-        cv2.imwrite('./augment/'+val+'_'+ str(cnt+i)+'_label.jpg',label[i,:,:])
+    #for i in range(img.shape[0]):
+    #    cv2.imwrite('./augment/'+val+'_'+ str(cnt+i)+'_img.jpg',img[i,:,:])
+    #    cv2.imwrite('./augment/'+val+'_'+ str(cnt+i)+'_label.jpg',label[i,:,:])
 
     img = img / 255
 
@@ -80,6 +81,7 @@ def dataset(args, mode='train',
                                            height_shift_range=0.1,
                                            shear_range=0.2,
                                            zoom_range=0.1)
+                                           #brightness_range=[0.8,1.2])
 
         label_datagen = ImageDataGenerator(rotation_range=20,
                                            horizontal_flip=True,
@@ -138,6 +140,7 @@ def dataset(args, mode='train',
             batch_size = args.batch_size,
             save_to_dir = save_to_dir,
             save_prefix  = image_save_prefix,
+            shuffle = shuffle,
             seed = seed+1)
 
         label_generator2 = label_datagen.flow_from_directory(
@@ -149,6 +152,7 @@ def dataset(args, mode='train',
             batch_size = args.batch_size,
             save_to_dir = save_to_dir,
             save_prefix  = label_save_prefix,
+            shuffle = shuffle,
             seed = seed+1)
         data_generator2 = zip(image_generator2, label_generator2)
 
