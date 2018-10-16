@@ -197,8 +197,8 @@ class Checkpoint:
         self.model.load_state_dict(checkpoint["model_state"])
         self.epoch = checkpoint["epoch"]
         self.best_score = checkpoint["best_score"]
-        #if self.optimizer:
-        #    self.optimizer.load_state_dict(checkpoint["optimizer_state"])
+        if self.optimizer:
+            self.optimizer.load_state_dict(checkpoint["optimizer_state"])
 
     def save(self, path):
         state_dict = self.model.module.state_dict()
