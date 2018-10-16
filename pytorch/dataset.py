@@ -12,7 +12,6 @@ import collections
 import torch.utils.data
 import torchvision
 import torchvision.transforms as transforms
-
 try:
     import accimage
 except ImportError:
@@ -20,11 +19,11 @@ except ImportError:
 
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image, PILLOW_VERSION
-
 from scipy.ndimage.filters import gaussian_filter
 from scipy.ndimage.interpolation import map_coordinates
 
 import config
+
 
 def data_loader(args, mode):
     # Data Flag Check
@@ -124,7 +123,8 @@ class TrainSet(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         if np.random.choice(2, 1, p=[1-self.data_rate, self.data_rate]) == 0:
-            idx = np.random.randint(len(self.img_path1))
+            idx = idx % len(self.img_path1)
+            #idx = np.random.randint(len(self.img_path1))
             img_path = self.img_path1[idx]
             label_path = self.label_path1[idx]
         else:
