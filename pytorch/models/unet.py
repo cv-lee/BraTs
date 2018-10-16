@@ -5,58 +5,66 @@ import torch.nn as nn
 from torch.nn.functional import softmax
 
 
-def conv3x3(in_c, out_c, kernel_size=3, stride=1, padding=1, bias=True, useBN=False):
+def conv3x3(in_c, out_c, kernel_size=3, stride=1, padding=1,
+            bias=True, useBN=False, drop_rate=0):
     if useBN:
         return nn.Sequential(
                 nn.ReflectionPad2d(padding),
                 nn.Conv2d(in_c, out_c, kernel_size, stride, padding=0, bias=bias),
                 nn.BatchNorm2d(out_c),
+                nn.Dropout2d(p=drop_rate),
                 nn.ReLU(inplace=True),
                 nn.ReflectionPad2d(padding),
                 nn.Conv2d(out_c, out_c, kernel_size, stride, padding=0, bias=bias),
                 nn.BatchNorm2d(out_c),
+                nn.Dropout2d(p=drop_rate),
                 nn.ReLU(inplace=True))
     else:
         return nn.Sequential(
                 nn.ReflectionPad2d(padding),
                 nn.Conv2d(in_c, out_c, kernel_size, stride, padding=0, bias=bias),
+                nn.Dropout2d(p=drop_rate),
                 nn.ReLU(),
                 nn.ReflectionPad2d(padding),
                 nn.Conv2d(out_c, out_c, kernel_size, stride, padding=0, bias=bias),
+                nn.Dropout2d(p=drop_rate),
                 nn.ReLU())
 
 
-def upsample(in_c, out_c, bias=True):
+def upsample(in_c, out_c, bias=True, drop_rate=0):
 	return nn.Sequential(
         #nn.ReflectionPad2d(1),
 		nn.ConvTranspose2d(in_c, out_c, 4, 2, 1, bias=bias),
+        nn.Dropout2d(p=drop_rate),
         nn.ReLU())
 
 
 class UNet(nn.Module):
-    def __init__(self, class_num=2, useBN=False):
+    def __init__(self, in_channel=1, class_num=2, useBN=False, drop_rate=0):
         super(UNet, self).__init__()
         self.output_dim = class_num
-        self.conv1 = conv3x3(1, 64, useBN=useBN)
-        self.conv2 = conv3x3(64, 128, useBN=useBN)
-        self.conv3 = conv3x3(128, 256, useBN=useBN)
-        self.conv4 = conv3x3(256, 512, useBN=useBN)
-        self.conv5 = conv3x3(512, 1024, useBN=useBN)
+        self.drop_rate = drop_rate
+        self.conv1 = conv3x3(in_channel, 64, useBN=useBN, drop_rate=self.drop_rate)
+        self.conv2 = conv3x3(64, 128, useBN=useBN, drop_rate=self.drop_rate)
+        self.conv3 = conv3x3(128, 256, useBN=useBN, drop_rate=self.drop_rate)
+        self.conv4 = conv3x3(256, 512, useBN=useBN, drop_rate=self.drop_rate)
+        self.conv5 = conv3x3(512, 1024, useBN=useBN, drop_rate=self.drop_rate)
 
-        self.conv4m = conv3x3(1024, 512, useBN=useBN)
-        self.conv3m = conv3x3(512, 256, useBN=useBN)
-        self.conv2m = conv3x3(256, 128, useBN=useBN)
-        self.conv1m = conv3x3(128, 64, useBN=useBN)
+        self.conv4m = conv3x3(1024, 512, useBN=useBN, drop_rate=self.drop_rate)
+        self.conv3m = conv3x3(512, 256, useBN=useBN, drop_rate=self.drop_rate)
+        self.conv2m = conv3x3(256, 128, useBN=useBN, drop_rate=self.drop_rate)
+        self.conv1m = conv3x3(128, 64, useBN=useBN, drop_rate=self.drop_rate)
 
         self.conv0  = nn.Sequential(nn.ReflectionPad2d(1),
                                     nn.Conv2d(64, self.output_dim, 3, 1, 0),
+                                    nn.Dropout2d(p=self.drop_rate),
                                     nn.ReLU())
         self.max_pool = nn.MaxPool2d(2)
 
-        self.upsample54 = upsample(1024, 512)
-        self.upsample43 = upsample(512, 256)
-        self.upsample32 = upsample(256, 128)
-        self.upsample21 = upsample(128, 64)
+        self.upsample54 = upsample(1024, 512, drop_rate=self.drop_rate)
+        self.upsample43 = upsample(512, 256, drop_rate=self.drop_rate)
+        self.upsample32 = upsample(256, 128, drop_rate=self.drop_rate)
+        self.upsample21 = upsample(128, 64, drop_rate=self.drop_rate)
 
 		## weight initialization
         for m in self.modules():
