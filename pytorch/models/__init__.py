@@ -20,7 +20,7 @@ def load_model(args, class_num, mode):
 
     # Model Init
     if args.model == 'unet':
-        net = UNet(class_num)
+        net = UNet(args.in_channel, class_num, drop_rate=args.drop_rate)
     elif args.model == 'pspnet_squeeze':
         net = pspnet_squeeze()
     elif args.model == 'pspnet_res18':
