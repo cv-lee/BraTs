@@ -31,7 +31,7 @@ def train(args):
     for epoch in range(start_epoch, start_epoch+args.epochs):
 
         # Train Model
-        print('\nEpoch: {}\n<Train>\n'.format(epoch))
+        print('\n\n\nEpoch: {}\n<Train>'.format(epoch))
         net.train(True)
         loss = 0
         lr = args.lr * (0.5 ** (epoch // 4))
@@ -55,8 +55,15 @@ def train(args):
         logging.info(log_msg)
 
         # Validate Model
-        print('\n<Validation>\n')
+        print('\n\n<Validation>')
         net.eval()
+        for module in net.module.modules():
+            if isinstance(module, torch.nn.modules.Dropout2d):
+                module.train(True)
+            elif isinstance(module, torch.nn.modules.Dropout):
+                module.train(True)
+            else:
+                pass
         loss = 0
         torch.set_grad_enabled(False)
         for idx, (inputs, targets, paths) in enumerate(validloader):
@@ -73,6 +80,7 @@ def train(args):
                         %(epoch, loss/(idx+1), 1-(loss/(idx+1)))])
         logging.info(log_msg)
 
+        # Save Model
         loss /= (idx+1)
         score = 1 - loss
         if score > best_score:
@@ -86,20 +94,24 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--resume", type=bool, default=False,
                         help="Model Trianing resume.")
-    parser.add_argument("--model", type=str, default='deeplab',
-                        help="Model Name (unet, pspnet_squeeze, pspnet_res18,\
+    parser.add_argument("--model", type=str, default='pspnet_res50',
+                        help="Model Name (unet, pspnet_squeeze, pspnet_res50,\
                         pspnet_res34, pspnet_res50, deeplab)")
+    parser.add_argument("--in_channel", type=int, default=1,
+                        help="A number of images to use for input")
     parser.add_argument("--batch_size", type=int, default=80,
                         help="The batch size to load the data")
     parser.add_argument("--epochs", type=int, default=30,
                         help="The training epochs to run.")
+    parser.add_argument("--drop_rate", type=float, default=0.1,
+                        help="Drop-out Rate")
     parser.add_argument("--lr", type=float, default=0.001,
                         help="Learning rate to use in training")
     parser.add_argument("--data", type=str, default="complete",
                         help="Label data type.")
-    parser.add_argument("--img_root", type=str, default="../data/train/image_FLAIR",
+    parser.add_argument("--img_root", type=str, default="../../data/train/image_FLAIR",
                         help="The directory containing the training image dataset.")
-    parser.add_argument("--label_root", type=str, default="../data/train/label",
+    parser.add_argument("--label_root", type=str, default="../../data/train/label",
                         help="The directory containing the training label datgaset")
     parser.add_argument("--output_root", type=str, default="./output/prediction",
                         help="The directory containing the result predictions")
