@@ -21,7 +21,6 @@ def test(args):
     # Model Load
     net, _, _, _ = load_model(args, class_num=config.class_num, mode='test')
 
-    # Loss Init
     net.eval()
     torch.set_grad_enabled(False)
     for idx, (inputs, paths) in enumerate(testloader):
