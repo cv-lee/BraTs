@@ -16,20 +16,19 @@ def load_model(args, mode):
 
     # Device Init
     device = config.device
+    drop_rate = config.drop_rate
 
     # Model Init
     if args.model == 'unet':
-        net = UNet(class_num=config.class_num, drop_rate=args.drop_rate)
-    elif args.model == 'pspnet_squeeze':
-        net = pspnet_squeeze()
+        net = UNet(drop_rate=drop_rate)
     elif args.model == 'pspnet_res18':
-        net = pspnet_res18()
+        net = pspnet_res18(drop_rate=drop_rate)
     elif args.model == 'pspnet_res34':
-        net = pspnet_res34()
+        net = pspnet_res34(drop_rate=drop_rate)
     elif args.model == 'pspnet_res50':
-        net = pspnet_res50()
+        net = pspnet_res50(drop_rate=drop_rate)
     elif args.model == 'deeplab':
-        net = Deeplab_V3_Plus()
+        net = Deeplab_V3_Plus(drop_rate=drop_rate)
     else:
         raise ValueError('args.model ERROR')
 
