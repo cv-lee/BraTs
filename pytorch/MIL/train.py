@@ -28,7 +28,6 @@ def train(args):
     logging.info(log_msg)
 
     for epoch in range(start_epoch, start_epoch+args.epochs):
-
         # Train Model
         print('\n\n\nEpoch: {}\n<Train>'.format(epoch))
         net.train(True)
@@ -47,9 +46,9 @@ def train(args):
             batch_loss.backward()
             optimizer.step()
             loss += float(batch_loss)
-            progress_bar(idx, len(trainloader), 'Loss: %.5f, Dice-Coef: %.5f'
+            progress_bar(idx, len(trainloader), 'Loss:%.4f, DSC: %.4f'
                          %((loss/(idx+1)), (1-(loss/(idx+1)))))
-        log_msg = '\n'.join(['Epoch: %d  Loss: %.5f,  Dice-Coef:  %.5f'\
+        log_msg = '\n'.join(['Epoch:%d  Loss:%.5f,  DSC:%.4f'\
                          %(epoch, loss/(idx+1), 1-(loss/(idx+1)))])
         logging.info(log_msg)
         torch.cuda.empty_cache()
@@ -65,19 +64,23 @@ def train(args):
             else:
                 pass
         loss = 0
+        iou = 0
+        f1_score = 0
         torch.set_grad_enabled(False)
         for idx, (inputs1, inputs2, inputs3, inputs4, targets, paths) in enumerate(validloader):
             inputs1, inputs2, inputs3, inputs4 =\
                 inputs1.to(device), inputs2.to(device), inputs3.to(device), inputs4.to(device)
             targets = targets.to(device)
             outputs = net(inputs1, inputs2, inputs3, inputs4)
-            #outputs = post_process(args, inputs, outputs, save=False)
+            outputs = post_process(args, inputs1, outputs, paths, save=False)
             batch_loss = dice_coef(outputs, targets, backprop=False)
             loss += float(batch_loss)
-            progress_bar(idx, len(validloader), 'Loss: %.5f, Dice-Coef: %.5f'
-                         %((loss/(idx+1)), (1-(loss/(idx+1)))))
-        log_msg = '\n'.join(['Epoch: %d  Loss: %.5f,  Dice-Coef:  %.5f'
-                        %(epoch, loss/(idx+1), 1-(loss/(idx+1)))])
+            iou += iou_calc(outputs, targets)
+            f1_score += calculate(outputs, targets)
+            progress_bar(idx, len(validloader), 'Loss: %.4f, DSC:%.4f, F1:%.4f, IoU:%.4f'
+                         %((loss/(idx+1)), (1-(loss/(idx+1))), f1_score/(idx+1),iou/(idx+1)))
+        log_msg = '\n'.join(['Epoch: %d  Loss:%.4f,  DSC:%.4f, F1:%.4f, IoU:%.4f'
+                        %(epoch, loss/(idx+1), 1-(loss/(idx+1)), f1_score/(idx+1), iou/(idx+1))])
         logging.info(log_msg)
 
         # Save Model
