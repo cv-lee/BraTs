@@ -89,8 +89,57 @@ def erode_dilate(outputs, kernel_size=7):
         outputs[i] = img
     return outputs
 
+def post_process(args, imgs, preds, aleatoric, epistemic, img_path,
+                 crf=True, erode=True, save=True, overlap=True):
+    batch_size = preds.shape[0]
+    imgs = np.squeeze(imgs) * 255
+    aleatoric = aleatoric * 1020 # Aleatoric Uncertainty Max Value: 0.25
+    # Conditional Random Field
+    if crf:
+        preds = get_crf_img(imgs, preds)
 
-def post_process(args, inputs, outputs, input_path=None,
+    # Erosion and Dilation
+    if erode:
+        preds = erode_dilate(preds, kernel_size=7)
+    if save == False:
+        return preds
+
+    preds = preds * 255
+    for i in range(batch_size):
+        path = img_path[i].split('/')
+        output_folder = os.path.join(args.output_root, path[-2])
+        try:
+            os.mkdir(output_folder)
+        except:
+            pass
+        output_path = os.path.join(output_folder, path[-1])
+
+        if overlap:
+            pred = preds[i]
+            pred = np.expand_dims(pred, axis=2)
+            zeros = np.zeros(pred.shape)
+            pred = (np.concatenate((zeros,zeros,pred), axis=2)).astype(np.float32)
+
+            uncertainty = (aleatoric[i,:,:]>15).astype(np.uint8)*165
+            uncertainty = np.expand_dims(uncertainty, axis=2)
+            uncertainty = np.concatenate((zeros,uncertainty,zeros),axis=2).astype(np.float32)
+
+            img = (np.expand_dims(imgs[i], axis=2)).astype(np.float32)
+            img = np.concatenate((img,img,img), axis=2)
+            img = img + pred + uncertainty
+
+            if img.max() > 0:
+                img = (img/img.max())*255
+            else:
+                img = (img/1) * 255
+            cv2.imwrite(output_path, img)
+        else:
+            img = preds[i]
+            cv2.imwrite(output_path, img)
+    return None
+
+
+def post_process_train(args, inputs, outputs, input_path=None,
                  crf_flag=True, erode_dilate_flag=True,
                  save=True, overlap=True):
     inputs = (np.array(inputs.squeeze()).astype(np.float32)) * 255
