@@ -191,6 +191,7 @@ class ValidSet(torch.utils.data.Dataset):
             self.img_path += glob.glob(os.path.join(self.img_root1, folder_name, "*.jpg"))
         for folder_name in os.listdir(self.label_root):
             self.label_path += glob.glob(os.path.join(self.label_root, folder_name, "*.jpg"))
+
         self.img_path = sorted(self.img_path)
         self.label_path = sorted(self.label_path)
 
@@ -204,10 +205,12 @@ class ValidSet(torch.utils.data.Dataset):
         img_path2 = os.path.join(self.img_root2, file_path)
         img_path3 = os.path.join(self.img_root3, file_path)
         img_path4 = os.path.join(self.img_root4, file_path)
-        img1 = Image.open(img_path1)
-        img2 = Image.open(img_path2)
-        img3 = Image.open(img_path3)
-        img4 = Image.open(img_path4)
+
+        img1 = self.totensor(Image.open(img_path1))
+        img2 = self.totensor(Image.open(img_path2))
+        img3 = self.totensor(Image.open(img_path3))
+        img4 = self.totensor(Image.open(img_path4))
+
         label = cv2.imread(self.label_path[idx], cv2.IMREAD_GRAYSCALE)
         if self.data == 'complete':
             label[label < 25] = 0
@@ -232,8 +235,8 @@ class ValidSet(torch.utils.data.Dataset):
         label = label.astype(np.float32)
         label = np.concatenate((np.absolute(label-1) , label),axis=0)
         label = torch.from_numpy(label)
-        return self.totensor(img1), self.totensor(img2), self.totensor(img3),\
-                self.totensor(img4), label, self.img_path[idx]
+
+        return img1, img2, img3, img4, label, self.img_path[idx]
 
 
 class TestSet(torch.utils.data.Dataset):
@@ -259,12 +262,13 @@ class TestSet(torch.utils.data.Dataset):
         img_path2 = os.path.join(self.img_root2, file_path)
         img_path3 = os.path.join(self.img_root3, file_path)
         img_path4 = os.path.join(self.img_root4, file_path)
-        img1 = Image.open(img_path1)
-        img2 = Image.open(img_path2)
-        img3 = Image.open(img_path3)
-        img4 = Image.open(img_path4)
-        return self.totensor(img1), self.totensor(img2), self.totensor(img3),\
-                self.totensor(img4), self.img_path[idx]
+
+        img1 = self.totensor(Image.open(img_path1))
+        img2 = self.totensor(Image.open(img_path2))
+        img3 = self.totensor(Image.open(img_path3))
+        img4 = self.totensor(Image.open(img_path4))
+
+        return img1, img2, img3, img4, file_path
 
 
 
