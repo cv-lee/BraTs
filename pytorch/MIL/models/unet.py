@@ -11,13 +11,13 @@ def conv3x3(in_c, out_c, kernel_size=3, stride=1, padding=1,
         return nn.Sequential(
                 nn.ReflectionPad2d(padding),
                 nn.Conv2d(in_c, out_c, kernel_size, stride, padding=0, bias=bias),
-                nn.Dropout2d(p=drop_rate),
                 nn.BatchNorm2d(out_c),
+                nn.Dropout2d(p=drop_rate),
                 nn.ReLU(inplace=True),
                 nn.ReflectionPad2d(padding),
                 nn.Conv2d(out_c, out_c, kernel_size, stride, padding=0, bias=bias),
-                nn.Dropout2d(p=drop_rate),
                 nn.BatchNorm2d(out_c),
+                nn.Dropout2d(p=drop_rate),
                 nn.ReLU(inplace=True))
     else:
         return nn.Sequential(
@@ -47,11 +47,9 @@ class UNet(nn.Module):
 
         extractor = nn.Sequential(nn.ReflectionPad2d(1),
                                   nn.Conv2d(in_channel, 32, 3, 1, 0),
-                                  nn.Dropout2d(p=self.drop_rate),
                                   nn.ReLU(),
                                   nn.ReflectionPad2d(1),
                                   nn.Conv2d(32, 32, 3, 1, 0),
-                                  nn.Dropout2d(p=self.drop_rate),
                                   nn.ReLU())
         self.extractor1 = extractor
         self.extractor2 = extractor
@@ -71,7 +69,6 @@ class UNet(nn.Module):
 
         self.conv0  = nn.Sequential(nn.ReflectionPad2d(1),
                                     nn.Conv2d(128, self.output_dim, 3, 1, 0),
-                                    nn.Dropout2d(p=self.drop_rate),
                                     nn.ReLU())
         self.max_pool = nn.MaxPool2d(2)
 
