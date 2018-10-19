@@ -41,11 +41,10 @@ def test(args):
                 outputs = np.concatenate((outputs, output), axis=0)
 
         img = input1.cpu().detach().numpy()
-        prediction = (np.mean(outputs, axis=0)).argmax(axis=1)
+        prediction = np.mean(outputs, axis=0)
         aleatoric = np.mean(outputs*(1-outputs), axis=0)[:,1,:,:]
         epistemic = (np.mean(outputs**2, axis=0) - np.mean(outputs, axis=0)**2)[:,1,:,:]
-        post_process(args, img, prediction, aleatoric, epistemic, path,
-                     crf=False, erode=False)
+        post_process(args, img, prediction, path, aleatoric, epistemic)
         print(idx)
 
 if __name__ == "__main__":
