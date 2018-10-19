@@ -42,8 +42,6 @@ def train(args):
                 inputs1.to(device), inputs2.to(device), inputs3.to(device), inputs4.to(device)
             targets = targets.to(device)
             outputs = net(inputs1, inputs2, inputs3, inputs4)
-            if type(outputs) == tuple:
-                outputs = outputs[0]
             batch_loss = dice_coef(outputs, targets)
             optimizer.zero_grad()
             batch_loss.backward()
@@ -59,14 +57,13 @@ def train(args):
         # Validate Model
         print('\n\n<Validation>')
         net.eval()
-        #for module in net.module.model.modules():
-        #    if isinstance(module, torch.nn.modules.Dropout2d):
-        #        module.train(True)
-        #    elif isinstance(module, torch.nn.modules.Dropout):
-        #        module.train(True)
-        #    else:
-        #        pass
-
+        for module in net.module.modules():
+            if isinstance(module, torch.nn.modules.Dropout2d):
+                module.train(True)
+            elif isinstance(module, torch.nn.modules.Dropout):
+                module.train(True)
+            else:
+                pass
         loss = 0
         torch.set_grad_enabled(False)
         for idx, (inputs1, inputs2, inputs3, inputs4, targets, paths) in enumerate(validloader):
@@ -74,8 +71,6 @@ def train(args):
                 inputs1.to(device), inputs2.to(device), inputs3.to(device), inputs4.to(device)
             targets = targets.to(device)
             outputs = net(inputs1, inputs2, inputs3, inputs4)
-            if type(outputs) == tuple:
-                outputs = outputs[0]
             #outputs = post_process(args, inputs, outputs, save=False)
             batch_loss = dice_coef(outputs, targets, backprop=False)
             loss += float(batch_loss)
@@ -99,15 +94,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--resume", type=bool, default=False,
                         help="Model Trianing resume.")
-    parser.add_argument("--model", type=str, default='unet',
+    parser.add_argument("--model", type=str, default='pspnet_res34',
                         help="Model Name (unet, pspnet_squeeze, pspnet_res50,\
                         pspnet_res34, pspnet_res50, deeplab)")
-    parser.add_argument("--batch_size", type=int, default=40,
+    parser.add_argument("--batch_size", type=int, default=80,
                         help="The batch size to load the data")
     parser.add_argument("--epochs", type=int, default=30,
                         help="The training epochs to run.")
-    parser.add_argument("--drop_rate", type=float, default=0.25,
-                        help="Drop-out Rate")
     parser.add_argument("--lr", type=float, default=0.001,
                         help="Learning rate to use in training")
     parser.add_argument("--data", type=str, default="complete",
