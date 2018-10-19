@@ -5,7 +5,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # Model output shape Init
 class_num = 2
-
+drop_rate = 0.1
 
 # Data Handling Parameters
 complete_threshold = 0.05
