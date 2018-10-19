@@ -35,11 +35,8 @@ def load_model(args, mode):
     # Optimizer Init
     if mode == 'train':
         resume = args.resume
-        #optimizer = Adam(net.parameters(), lr=args.lr)
-        optimizer = SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4)
     elif mode == 'test':
         resume = True
-        optimizer = None
     else:
         raise ValueError('load_model mode ERROR')
 
@@ -57,5 +54,9 @@ def load_model(args, mode):
         net.cuda()
         net = torch.nn.DataParallel(net)
         torch.backends.cudnn.benchmark=True
+    if mode == 'train':
+        optimizer = SGD(net.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4)
+    else:
+        optimizer = None
 
     return net, optimizer, best_score, start_epoch
