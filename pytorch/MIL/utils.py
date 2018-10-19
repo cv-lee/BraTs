@@ -53,8 +53,60 @@ def dice_coef(preds, targets, backprop=True):
         loss = loss/class_num
         return loss
 
+def iou_calc(preds, targets):
+    if type(preds) == torch.Tensor:
+        if len(preds.shape) > 3:
+            preds = (preds.cpu().detach().numpy()).argmax(axis=1)
+    elif type(preds) == np.ndarray:
+        if len(preds.shape) > 3:
+            preds = preds.argmax(axis=1)
+    else:
+        raise ValueError('iou input(preds) type error')
+
+    if type(targets) == torch.Tensor:
+        if len(targets.shape) > 3:
+            targets = (targets.cpu().detach().numpy()).argmax(axis=1)
+    elif type(preds) == np.ndarray:
+        if len(targets.shape) > 3:
+            targets = targets.argmax(axis=1)
+    else:
+        raise ValueError('iou input(target) type error')
+
+    inter = (preds * targets).sum()
+    union = preds.sum() + targets.sum() - inter
+    iou = (inter+1) / (union+1)
+    return iou
+
+def calculate(preds, targets):
+    if type(preds) == torch.Tensor:
+        if len(preds.shape) > 3:
+            preds = (preds.cpu().detach().numpy()).argmax(axis=1)
+    elif type(preds) == np.ndarray:
+        if len(preds.shape) > 3:
+            preds = preds.argmax(axis=1)
+    else:
+        raise ValueError('iou input(preds) type error')
+
+    if type(targets) == torch.Tensor:
+        if len(targets.shape) > 3:
+            targets = (targets.cpu().detach().numpy()).argmax(axis=1)
+    elif type(preds) == np.ndarray:
+        if len(targets.shape) > 3:
+            targets = targets.argmax(axis=1)
+    else:
+        raise ValueError('iou input(target) type error')
+    tp = (preds * targets).sum()
+    fn = ((1-preds) * targets).sum()
+    fp = preds.sum() - tp
+    tn = preds.shape[0] * preds.shape[1] - tp - fn -fp
+    sensitivity = (tp+1) / (tp+fn+1)
+    recall = (tp+1) / (tp+fn+1)
+    f1_score =  (2*tp+1) / (2*tp+fp+fn+1)
+    return f1_score
 
 def get_crf_img(inputs, outputs):
+    inputs = np.expand_dims(inputs, axis=3)
+    inputs = np.concatenate((inputs,inputs,inputs), axis=3)
     for i in range(outputs.shape[0]):
         img = inputs[i]
         softmax_prob = outputs[i]
@@ -89,21 +141,26 @@ def erode_dilate(outputs, kernel_size=7):
         outputs[i] = img
     return outputs
 
-def post_process(args, imgs, preds, aleatoric, epistemic, img_path,
-                 crf=True, erode=True, save=True, overlap=True):
+def post_process(args, imgs, preds, img_path, aleatoric=None, epistemic=None,
+                 erode=True, save=True, overlap=True):
     batch_size = preds.shape[0]
-    imgs = np.squeeze(imgs) * 255
-    aleatoric = aleatoric * 1020 # Aleatoric Uncertainty Max Value: 0.25
-    # Conditional Random Field
-    if crf:
-        preds = get_crf_img(imgs, preds)
+    if type(aleatoric) != type(None):
+        aleatoric = aleatoric * 1020 # Aleatoric Uncertainty Max Value: 0.25
+
+    if type(imgs) == torch.Tensor:
+        imgs = np.squeeze(imgs.cpu().detach().numpy()) * 255
+    else:
+        imgs = np.squeeze(imgs) * 255
+    if type(preds) == torch.Tensor:
+        preds = (preds.cpu().detach().numpy()).argmax(axis=1)
+    else:
+        preds = (np.squeeze(preds)).argmax(axis=1)
 
     # Erosion and Dilation
     if erode:
         preds = erode_dilate(preds, kernel_size=7)
     if save == False:
         return preds
-
     preds = preds * 255
     for i in range(batch_size):
         path = img_path[i].split('/')
@@ -113,20 +170,25 @@ def post_process(args, imgs, preds, aleatoric, epistemic, img_path,
         except:
             pass
         output_path = os.path.join(output_folder, path[-1])
-
+        uncertainty_path = path[-1].split('.')[0]+'-Uncertainty.jpg'
+        uncertainty_path = os.path.join(output_folder, uncertainty_path)
         if overlap:
             pred = preds[i]
             pred = np.expand_dims(pred, axis=2)
             zeros = np.zeros(pred.shape)
             pred = (np.concatenate((zeros,zeros,pred), axis=2)).astype(np.float32)
-
-            uncertainty = (aleatoric[i,:,:]>15).astype(np.uint8)*165
-            uncertainty = np.expand_dims(uncertainty, axis=2)
-            uncertainty = np.concatenate((zeros,uncertainty,zeros),axis=2).astype(np.float32)
+            if type(aleatoric) != type(None):
+                cv2.imwrite(uncertainty_path, (aleatoric[i,:,:]>15).astype(np.uint8)*255)
+                uncertainty = (aleatoric[i,:,:]>15).astype(np.uint8)*165
+                uncertainty = np.expand_dims(uncertainty, axis=2)
+                uncertainty = np.concatenate((zeros,uncertainty,zeros),axis=2).astype(np.float32)
 
             img = (np.expand_dims(imgs[i], axis=2)).astype(np.float32)
             img = np.concatenate((img,img,img), axis=2)
-            img = img + pred + uncertainty
+            if type(aleatoric) != type(None):
+                img = img + pred# + uncertainty
+            else:
+                img = img + pred
 
             if img.max() > 0:
                 img = (img/img.max())*255
@@ -138,52 +200,6 @@ def post_process(args, imgs, preds, aleatoric, epistemic, img_path,
             cv2.imwrite(output_path, img)
     return None
 
-
-def post_process_train(args, inputs, outputs, input_path=None,
-                 crf_flag=True, erode_dilate_flag=True,
-                 save=True, overlap=True):
-    inputs = (np.array(inputs.squeeze()).astype(np.float32)) * 255
-    inputs = np.expand_dims(inputs, axis=3)
-    inputs = np.concatenate((inputs,inputs,inputs), axis=3)
-    outputs = np.array(outputs)
-
-    # Conditional Random Field
-    if crf_flag:
-        outputs = get_crf_img(inputs, outputs)
-    else:
-        outputs = outputs.argmax(1)
-
-    # Erosion and Dilation
-    if erode_dilate_flag:
-        outputs = erode_dilate(outputs, kernel_size=7)
-    if save == False:
-        return outputs
-
-    outputs = outputs*255
-    for i in range(outputs.shape[0]):
-        path = input_path[i].split('/')
-        output_folder = os.path.join(args.output_root, path[-2])
-        try:
-            os.mkdir(output_folder)
-        except:
-            pass
-        output_path = os.path.join(output_folder, path[-1])
-        if overlap:
-            img = outputs[i]
-            img = np.expand_dims(img, axis=2)
-            zeros = np.zeros(img.shape)
-            img = np.concatenate((zeros,zeros,img), axis=2)
-            img = np.array(img).astype(np.float32)
-            img = inputs[i] + img
-            if img.max() > 0:
-                img = (img/img.max())*255
-            else:
-                img = (img/1) * 255
-            cv2.imwrite(output_path, img)
-        else:
-            img = outputs[i]
-            cv2.imwrite(output_path, img)
-    return None
 
 '''
 TODO: Need to fix
