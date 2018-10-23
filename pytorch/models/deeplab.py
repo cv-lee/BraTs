@@ -248,8 +248,8 @@ class Encoder(nn.Module):
         self.atr_conv1 = atrous_conv(512, 256, 6, drop_rate)
         self.atr_conv2 = atrous_conv(512, 256, 12, drop_rate)
         self.atr_conv3 = atrous_conv(512, 256, 18, drop_rate)
-        #self.avgpool = nn.AvgPool2d(2) #impossible due to 15/2 = 7.5
-        #self.conv2 = conv1x1(512, 128)
+        self.avgpool = nn.AvgPool2d(2) #impossible due to 15/2 = 7.5
+        self.conv2 = conv1x1(512, 128)
         self.conv_cat = conv1x1(1024, 512)
 
     def forward(self, x):
@@ -257,9 +257,9 @@ class Encoder(nn.Module):
         y2 = self.atr_conv1(x)
         y3 = self.atr_conv2(x)
         y4 = self.atr_conv3(x)
-        #y5 = self.avgpool(x)
-        #y5 = self.conv2(y5)
-        #y5 = interpolate(y5, scale_factor=2, mode='bilinear', align_corners=True)
+        y5 = self.avgpool(x)
+        y5 = self.conv2(y5)
+        y5 = interpolate(y5, scale_factor=2, mode='bilinear', align_corners=True)
 
         y = torch.cat([y1, y2, y3, y4], dim=1)
         y = self.conv_cat(y)
