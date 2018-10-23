@@ -249,8 +249,8 @@ class Encoder(nn.Module):
         self.atr_conv2 = atrous_conv(512, 256, 12, drop_rate)
         self.atr_conv3 = atrous_conv(512, 256, 18, drop_rate)
         self.avgpool = nn.AvgPool2d(2) #impossible due to 15/2 = 7.5
-        self.conv2 = conv1x1(512, 128)
-        self.conv_cat = conv1x1(1024, 512)
+        self.conv2 = conv1x1(512, 256)
+        self.conv_cat = conv1x1(1280, 512)
 
     def forward(self, x):
         y1 = self.conv1(x)
