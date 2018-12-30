@@ -141,7 +141,7 @@ channel 0: background*
 <br>
 
 
-### 2-2) Data Argumentation
+### 2-2) Data Augmentation
 
 ![](https://i.imgur.com/yQmxilp.png)
 
