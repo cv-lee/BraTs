@@ -199,6 +199,10 @@ class Checkpoint:
         self.best_score = checkpoint["best_score"]
         if self.optimizer:
             self.optimizer.load_state_dict(checkpoint["optimizer_state"])
+            for state in self.optimizer.state.values():
+                  for k, v in state.items():
+                           if torch.is_tensor(v):
+                                    state[k] = v.cuda()
 
     def save(self, path):
         state_dict = self.model.module.state_dict()
