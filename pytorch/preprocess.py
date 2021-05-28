@@ -102,7 +102,9 @@ def nii2jpg_label(img_path, output_root):
         #color = np.concatenate([c0,c0,c255], 2)
         #color_img = color_img.astype(np.float32) + color
         #color_img = (color_img / color_img.max()) *255
-
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
+            
         cv2.imwrite(filename, gray_img)
 
 
