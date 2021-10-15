@@ -45,11 +45,11 @@ def nii2jpg_img(img_path, output_root):
     img_name = (img_path.split('/')[-1]).split('.')[0]
     output_path = os.path.join(output_root, img_name)
     try:
-        os.mkdir(output_root)
+        os.makedirs(output_root)
     except:
         pass
     try:
-        os.mkdir(output_path)
+        os.makedirs(output_path)
     except:
         pass
     img = nib.load(img_path)
